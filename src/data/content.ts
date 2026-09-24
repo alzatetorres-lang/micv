@@ -344,7 +344,7 @@ export const profiles: Profile[] = [
     eyebrow: 'Impartiendo ahora · Java IFCD052PO, 210 h',
     h1: 'Enseño tecnología que uso: programar, manejar los datos y sostener los sistemas.',
     intro: [
-      'Soy Natanael Alzate Torres, docente técnico IT acreditado por el SEPE (SSCE0110, nivel 3, nota media 8,2). Combino ocho años programando de verdad —Java, bases de datos, ERP— con el aula: imparto certificados de profesionalidad, programación y análisis de datos a profesionales en activo.',
+      'Soy Natanael Alzate Torres, docente técnico IT acreditado por el SEPE (SSCE0110, nivel 3, nota media 8,2). Combino programación real desde 2017 —Java, bases de datos, ERP— con el aula: imparto certificados de profesionalidad, programación y análisis de datos a profesionales en activo.',
     ],
     claim: '250 horas impartidas en 2026 entre programación en Java (210 h) y Data Mining con Business Intelligence (40 h). Materia técnica convertida en aprendizaje práctico, medible y aplicable desde el primer día.',
     ctaPrimary: { label: 'Colaborar con tu centro', href: '#contacto' },
@@ -477,10 +477,10 @@ export const profiles: Profile[] = [
     slug: 'administracion', route: '/administracion',
     title: 'Administración digital, ERP e IA aplicada',
     description: 'Digitalización de procesos administrativos: integración ERP (Sage, SAP FICO), CRM, control de costes y automatización de tareas repetitivas con IA.',
-    eyebrow: 'Grado en ADE · ocho años en entornos técnicos',
+    eyebrow: 'Grado en ADE · en entornos técnicos desde 2017',
     h1: 'Automatizo la administración de tu empresa: ERP, IA y procesos que devuelven horas a tu equipo.',
     intro: [
-      'Soy Natanael Alzate Torres, graduado en Administración y Dirección de Empresas por la UCLM con ocho años en entornos empresariales y técnicos. Digitalizo procesos administrativos con IA, gestiono ERP (Sage, SAP FICO) y CRM corporativo, y aporto control de calidad con base acreditada.',
+      'Soy Natanael Alzate Torres, graduado en Administración y Dirección de Empresas por la UCLM y en entornos empresariales y técnicos desde 2017. Digitalizo procesos administrativos con IA, gestiono ERP (Sage, SAP FICO) y CRM corporativo, y aporto control de calidad con base acreditada.',
     ],
     claim: 'Entiendo el negocio y sé programar la solución. Esa combinación es la que suele faltar cuando una empresa intenta digitalizar su administración sin romper lo que ya funciona.',
     ctaPrimary: { label: 'Pedir diagnóstico', href: '#contacto' },
