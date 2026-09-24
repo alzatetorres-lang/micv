@@ -130,7 +130,7 @@ export const projects: Project[] = [
   },
   {
     slug: 'prom-ibs', name: 'PROM International Business School', sector: 'Educación · Escuela de negocios',
-    url: 'https://promib.school', img: '/img/portfolio/promib-school.webp', status: 'Pre-lanzamiento',
+    url: 'https://promibs.school', img: '/img/portfolio/promib-school.webp', status: 'Pre-lanzamiento',
     tags: ['HTML', 'CSS', 'JavaScript', 'Vídeo adaptativo', 'Hostinger'],
     resumen: 'Página de pre-lanzamiento con vídeo a pantalla completa: versión vertical en móvil, horizontal en escritorio y dominio activo desde el primer día.',
     reto: 'Ocupar el dominio de una escuela de negocios que aún no ha lanzado su oferta, con una imagen cuidada y sin indexar contenido provisional.',
