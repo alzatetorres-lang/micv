@@ -14,6 +14,9 @@ export const site = {
   // NC-03: endpoint real. La access key de Web3Forms es pública por diseño
   // (viaja en el HTML); la variable de entorno permite rotarla sin tocar código.
   formEndpoint: 'https://api.web3forms.com/submit',
+  // Datos LSSI art. 10. Vacíos = la línea no se muestra. Rellenar antes de facturar desde la web.
+  nif: '',
+  domicilio: '',
   formKey: import.meta.env.PUBLIC_WEB3FORMS_KEY || 'ea55e5d5-a299-4e21-8654-68d70d9b082e',
 } as const;
 

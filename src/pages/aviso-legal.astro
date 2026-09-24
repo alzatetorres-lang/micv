@@ -11,8 +11,8 @@ import { site } from '../data/site';
   <h2>Titular del sitio</h2>
   <ul>
     <li><strong>Titular:</strong> {site.name}</li>
-    <li><strong>NIF:</strong> __nif__</li>
-    <li><strong>Domicilio a efectos de notificaciones:</strong> __domicilio__, Cuenca, España</li>
+    {site.nif && <li><strong>NIF:</strong> {site.nif}</li>}
+    {site.domicilio && <li><strong>Domicilio a efectos de notificaciones:</strong> {site.domicilio}</li>}
     <li><strong>Correo electrónico:</strong> <a href={`mailto:${site.email}`}>{site.email}</a></li>
     <li><strong>Formulario de contacto:</strong> <a href="/#contacto">natanaelalzatetorres.com/#contacto</a></li>
     <li><strong>Actividad:</strong> servicios de desarrollo web, automatización de procesos, formación técnica y consultoría de calidad</li>

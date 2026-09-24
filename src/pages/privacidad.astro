@@ -13,7 +13,7 @@ import { site } from '../data/site';
   <h2>Responsable del tratamiento</h2>
   <ul>
     <li><strong>Responsable:</strong> {site.name}</li>
-    <li><strong>NIF:</strong> __nif__</li>
+    {site.nif && <li><strong>NIF:</strong> {site.nif}</li>}
     <li><strong>Contacto:</strong> <a href={`mailto:${site.email}`}>{site.email}</a></li>
   </ul>
 
