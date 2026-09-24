@@ -1,6 +1,6 @@
 ---
 import '../styles/global.css';
-import { site, facts } from '../data/site';
+import { site } from '../data/site';
 import { timeline, formacion } from '../data/content';
 import Navbar from '../components/Navbar.astro';
 import Footer from '../components/Footer.astro';
@@ -11,13 +11,17 @@ interface Props {
   description?: string;
   /** Deja el JSON-LD de Person solo en la home para no duplicar la entidad. */
   personSchema?: boolean;
+  /** La página incluye la sección #contacto (las de perfil sí; legales, 404 y gracias no). */
+  hasContact?: boolean;
 }
 
 const {
   title = `${site.name} · ${site.role}`,
   description = 'Analista programador y docente técnico acreditado por el SEPE. Desarrollo web, automatización con IA, gestión de formación FUNDAE y FOCO, y sistemas de calidad. Cuenca y remoto.',
   personSchema = false,
+  hasContact = false,
 } = Astro.props;
+const contactHref = hasContact ? '#contacto' : '/#contacto';
 
 /* NC-01 / NC-02: canonical y og:url siempre contra Astro.site,
    que astro.config.mjs fija en https://natanaelalzatetorres.com
@@ -33,13 +37,14 @@ const person = {
   name: site.name,
   jobTitle: site.role,
   email: `mailto:${site.email}`,
-  telephone: site.phone,
   address: { '@type': 'PostalAddress', addressLocality: 'Cuenca', addressRegion: 'Castilla-La Mancha', addressCountry: 'ES' },
   url: site.url,
   image: new URL(site.photo, Astro.site).toString(),
   /* NC-05 / NC-07: solo perfiles verificados y con contenido. */
   sameAs: [site.linkedin],
   knowsAbout: [
+    'Desarrollo web con Next.js, React y Astro',
+    'SEO técnico y datos estructurados',
     'Docencia en Formación Profesional para el Empleo',
     'Programación Java',
     'Bases de datos SQL',
@@ -126,11 +131,11 @@ const webpage = {
 
   <body class="bg-grain">
     <a href="#main" class="sr-only focus:not-sr-only focus:absolute focus:z-50 focus:m-3 focus:rounded focus:bg-ink-950 focus:px-4 focus:py-2 focus:text-white">Saltar al contenido</a>
-    <Navbar />
+    <Navbar contactHref={contactHref} />
     <main id="main" class="nx-page">
       <slot />
     </main>
-    <Footer />
+    <Footer contactHref={contactHref} />
     <ScrollFX />
     <script>
       import { initReveal } from '../scripts/reveal';

@@ -1,28 +1,26 @@
 ---
 import { site } from '../../data/site';
-/* NC-03: el formulario ya no usa `action="mailto:"`, que los navegadores
-   ignoran silenciosamente. Ahora envía a un endpoint real (Web3Forms).
-   Si falta la clave, NO se publica un formulario que no envía: se muestran
-   los canales directos. Un formulario roto es peor que no tenerlo. */
+/* Contacto solo por correo y formulario: el teléfono no se publica.
+   NC-03: el formulario envía a un endpoint real (Web3Forms). Sin JS funciona
+   con POST + redirect a /gracias; con JS envía por fetch y, si falla, lo dice
+   en la propia página en vez de dejar al usuario en una respuesta de la API.
+   Si algún día falta la clave, NO se publica un formulario que no envía. */
 const formListo = site.formKey.length > 0;
+const field = 'w-full min-w-0 rounded-sm border border-ink-200 bg-white px-3 py-2.5 text-[0.92rem] text-ink-950 outline-none transition-colors focus:border-brand-500';
 ---
 <section id="contacto" class="border-t border-ink-100 bg-white/60">
-  <div class="container-x grid gap-12 py-20 md:py-24 lg:grid-cols-[1fr_1.25fr]">
+  <div class="container-x grid grid-cols-1 gap-12 py-20 md:py-24 lg:grid-cols-[1fr_1.25fr]">
     <div>
       <h2 class="h-section text-ink-950">Hablemos</h2>
       <p class="mt-5 max-w-[46ch] text-[1rem] leading-relaxed text-ink-600">
-        ¿Tienes un proyecto entre manos, un expediente que revisar o un equipo al que formar?
-        Cuéntamelo sin compromiso y te respondo yo, en menos de 24 horas.
+        Un proyecto web, una automatización, una convocatoria docente o una oferta de empleo:
+        cuéntamelo por el formulario o por correo y te respondo yo, por escrito, en menos de 24 horas laborables.
       </p>
 
       <dl class="mt-8 flex flex-col gap-px overflow-hidden rounded-lg border border-ink-100 bg-ink-100">
         <div class="flex items-baseline gap-4 bg-ink-50 px-4 py-3">
           <dt class="w-20 shrink-0 font-mono text-[0.72rem] uppercase tracking-[0.1em] text-ink-400">Email</dt>
           <dd><a class="text-[0.92rem] text-ink-800 hover:text-brand-700" href={`mailto:${site.email}`}>{site.email}</a></dd>
-        </div>
-        <div class="flex items-baseline gap-4 bg-ink-50 px-4 py-3">
-          <dt class="w-20 shrink-0 font-mono text-[0.72rem] uppercase tracking-[0.1em] text-ink-400">Teléfono</dt>
-          <dd><a class="text-[0.92rem] text-ink-800 hover:text-brand-700" href={`tel:${site.phoneHref}`}>{site.phone}</a></dd>
         </div>
         <div class="flex items-baseline gap-4 bg-ink-50 px-4 py-3">
           <dt class="w-20 shrink-0 font-mono text-[0.72rem] uppercase tracking-[0.1em] text-ink-400">LinkedIn</dt>
@@ -32,15 +30,19 @@ const formListo = site.formKey.length > 0;
           <dt class="w-20 shrink-0 font-mono text-[0.72rem] uppercase tracking-[0.1em] text-ink-400">Área</dt>
           <dd class="text-[0.92rem] text-ink-800">Cuenca y provincia · remoto</dd>
         </div>
+        <div class="flex items-baseline gap-4 bg-ink-50 px-4 py-3">
+          <dt class="w-20 shrink-0 font-mono text-[0.72rem] uppercase tracking-[0.1em] text-ink-400">Respuesta</dt>
+          <dd class="text-[0.92rem] text-ink-800">Menos de 24 h laborables</dd>
+        </div>
       </dl>
-
-      <a href={site.whatsapp} rel="noopener" class="btn btn-whatsapp mt-6">Escribir por WhatsApp</a>
     </div>
 
     {formListo ? (
     <form
+      id="contact-form"
       action={site.formEndpoint}
       method="POST"
+      data-email={site.email}
       class="rounded-xl rounded-tr-sm border border-ink-100 bg-ink-50 p-6 md:p-8"
     >
       <input type="hidden" name="access_key" value={site.formKey} />
@@ -51,32 +53,29 @@ const formListo = site.formKey.length > 0;
 
       <p class="h-display text-[1.15rem] font-semibold text-ink-950">Cuéntame qué necesitas</p>
 
-      <div class="mt-6 grid gap-4 sm:grid-cols-2">
+      <div class="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2">
         <label class="flex flex-col gap-1.5">
           <span class="text-[0.78rem] font-medium text-ink-700">Nombre</span>
-          <input type="text" name="nombre" required autocomplete="name"
-            class="rounded-sm border border-ink-200 bg-white px-3 py-2.5 text-[0.92rem] text-ink-950 outline-none transition-colors focus:border-brand-500" />
+          <input type="text" name="nombre" required autocomplete="name" class={field} />
         </label>
         <label class="flex flex-col gap-1.5">
           <span class="text-[0.78rem] font-medium text-ink-700">Email</span>
-          <input type="email" name="email" required autocomplete="email"
-            class="rounded-sm border border-ink-200 bg-white px-3 py-2.5 text-[0.92rem] text-ink-950 outline-none transition-colors focus:border-brand-500" />
+          <input type="email" name="email" required autocomplete="email" class={field} />
         </label>
         <label class="flex flex-col gap-1.5">
-          <span class="text-[0.78rem] font-medium text-ink-700">Teléfono <span class="text-ink-400">(opcional)</span></span>
-          <input type="tel" name="telefono" autocomplete="tel"
-            class="rounded-sm border border-ink-200 bg-white px-3 py-2.5 text-[0.92rem] text-ink-950 outline-none transition-colors focus:border-brand-500" />
+          <span class="text-[0.78rem] font-medium text-ink-700">Empresa o centro <span class="text-ink-400">(opcional)</span></span>
+          <input type="text" name="empresa" autocomplete="organization" class={field} />
         </label>
         <label class="flex flex-col gap-1.5">
           <span class="text-[0.78rem] font-medium text-ink-700">Qué necesitas</span>
-          <select name="perfil" required
-            class="rounded-sm border border-ink-200 bg-white px-3 py-2.5 text-[0.92rem] text-ink-950 outline-none transition-colors focus:border-brand-500">
+          <select name="perfil" required class={field}>
             <option value="">Elige una opción</option>
-            <option>Docente para una convocatoria</option>
-            <option>Gestión y justificación de formación (FUNDAE / FOCO)</option>
-            <option>Calidad y mejora continua</option>
-            <option>Administración, ERP y automatización</option>
             <option>Web a medida</option>
+            <option>Automatización de procesos o IA</option>
+            <option>Docente para una acción formativa</option>
+            <option>Gestión de formación (FUNDAE / FOCO / Moodle)</option>
+            <option>Calidad y mejora continua</option>
+            <option>Oferta de empleo o colaboración</option>
             <option>Otra cosa</option>
           </select>
         </label>
@@ -84,32 +83,70 @@ const formListo = site.formKey.length > 0;
 
       <label class="mt-4 flex flex-col gap-1.5">
         <span class="text-[0.78rem] font-medium text-ink-700">Mensaje</span>
-        <textarea name="mensaje" rows="5" required
-          class="rounded-sm border border-ink-200 bg-white px-3 py-2.5 text-[0.92rem] leading-relaxed text-ink-950 outline-none transition-colors focus:border-brand-500"></textarea>
+        <textarea name="mensaje" rows="5" required minlength="10" class:list={[field, 'leading-relaxed']}></textarea>
       </label>
 
       <label class="mt-5 flex items-start gap-2.5 text-[0.82rem] leading-relaxed text-ink-600">
-        <input type="checkbox" name="rgpd" required class="mt-0.5 shrink-0 accent-[var(--color-brand-600)]" />
+        <input type="checkbox" name="privacidad" value="Aceptada" required class="mt-0.5 shrink-0 accent-[var(--color-brand-600)]" />
         <span>He leído y acepto la <a href="/privacidad" class="underline decoration-ink-300 underline-offset-2 hover:text-brand-700">política de privacidad</a>. Usaré tus datos solo para responderte.</span>
       </label>
 
-      <button type="submit" class="btn btn-primary mt-6 w-full sm:w-auto">Enviar mensaje</button>
+      <div class="mt-6 flex flex-wrap items-center gap-4">
+        <button type="submit" class="btn btn-primary w-full sm:w-auto">Enviar mensaje</button>
+        <p data-status role="status" aria-live="polite" class="text-[0.85rem] leading-relaxed text-ink-600"></p>
+      </div>
     </form>
     ) : (
     <div class="flex flex-col justify-center rounded-xl rounded-tr-sm border border-ink-100 bg-ink-50 p-8 md:p-10">
       <p class="h-display text-[1.25rem] font-semibold text-ink-950">Escríbeme directamente</p>
       <p class="mt-3 max-w-[44ch] text-[0.96rem] leading-relaxed text-ink-600">
-        Prefiero el correo o WhatsApp: llega antes y contesto yo. Cuéntame qué necesitas,
-        en qué plazo y con quién trabajarías.
+        Cuéntame qué necesitas, en qué plazo y con quién trabajarías. Contesto yo.
       </p>
       <div class="mt-7 flex flex-wrap gap-3">
         <a href={`mailto:${site.email}?subject=${encodeURIComponent('Consulta desde natanaelalzatetorres.com')}`} class="btn btn-primary">Enviar un correo</a>
-        <a href={site.whatsapp} rel="noopener" class="btn btn-whatsapp">WhatsApp</a>
       </div>
-      <p class="mt-6 font-mono text-[0.72rem] leading-relaxed text-ink-400">
-        Respuesta en menos de 24 h · Cuenca y provincia · remoto
-      </p>
     </div>
     )}
   </div>
 </section>
+
+<script>
+  const form = document.querySelector<HTMLFormElement>('#contact-form');
+  const status = form?.querySelector<HTMLElement>('[data-status]');
+  const button = form?.querySelector<HTMLButtonElement>('button[type="submit"]');
+
+  if (form && status && button) {
+    const label = button.textContent ?? 'Enviar mensaje';
+    const email = form.dataset.email ?? '';
+
+    form.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      const data = Object.fromEntries(new FormData(form)) as Record<string, string>;
+      // La redirección absoluta es para el envío sin JS; aquí se navega en el mismo dominio.
+      delete data.redirect;
+
+      button.disabled = true;
+      button.textContent = 'Enviando…';
+      status.textContent = '';
+
+      try {
+        const res = await fetch(form.action, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+          body: JSON.stringify(data),
+        });
+        const body = await res.json().catch(() => ({}));
+        if (!res.ok || !body.success) throw new Error(body.message || `HTTP ${res.status}`);
+        window.location.assign('/gracias');
+      } catch {
+        const link = document.createElement('a');
+        link.href = `mailto:${email}`;
+        link.textContent = email;
+        link.className = 'font-medium text-brand-700 underline underline-offset-2';
+        status.replaceChildren('No se ha podido enviar. Escríbeme a ', link, ' y te respondo igual.');
+        button.disabled = false;
+        button.textContent = label;
+      }
+    });
+  }
+</script>

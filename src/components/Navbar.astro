@@ -1,6 +1,10 @@
 ---
-import { site, nav } from '../data/site';
-const path = Astro.url.pathname.replace(/\/$/, '') || '/';
+import { nav, navAll } from '../data/site';
+interface Props { contactHref?: string }
+// Las páginas legales, 404 y gracias no tienen sección de contacto: su CTA va a la home.
+const { contactHref = '/#contacto' } = Astro.props;
+// build.format:'file' entrega /calidad.html: se normaliza para marcar la página activa.
+const path = Astro.url.pathname.replace(/\.html$/, '').replace(/\/(index)?$/, '') || '/';
 ---
 <header class="sticky top-0 z-40 border-b border-ink-100/80 bg-ink-50/85 backdrop-blur-md">
   <nav class="container-x flex items-center gap-4 py-3" aria-label="Principal">
@@ -9,7 +13,7 @@ const path = Astro.url.pathname.replace(/\/$/, '') || '/';
     </a>
 
     <ul class="ml-auto hidden items-center gap-1 lg:flex">
-      {nav.filter(n => n.href !== '/').map(n => (
+      {nav.map(n => (
         <li>
           <a
             href={n.href}
@@ -25,7 +29,7 @@ const path = Astro.url.pathname.replace(/\/$/, '') || '/';
       ))}
     </ul>
 
-    <a href="#contacto" class="btn btn-primary ml-auto text-[0.85rem] lg:ml-2">Hablemos</a>
+    <a href={contactHref} class="btn btn-primary ml-auto text-[0.85rem] lg:ml-2">Hablemos</a>
 
     <details class="relative lg:hidden">
       <summary class="list-none rounded-sm p-2 text-ink-700 hover:bg-ink-100" aria-label="Abrir menú">
@@ -34,7 +38,7 @@ const path = Astro.url.pathname.replace(/\/$/, '') || '/';
         </svg>
       </summary>
       <ul class="absolute right-0 top-11 w-60 rounded-lg border border-ink-100 bg-white p-2 shadow-lg">
-        {nav.map(n => (
+        {navAll.map(n => (
           <li>
             <a
               href={n.href}

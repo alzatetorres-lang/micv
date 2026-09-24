@@ -1,0 +1,47 @@
+---
+import { capabilities } from '../../data/content';
+// Tabla de competencias: capacidad · herramientas · evidencia comprobable.
+---
+<section id="capacidades" class="border-y border-ink-100 bg-white/50">
+  <div class="container-x py-20 md:py-24">
+    <div class="flex flex-wrap items-end justify-between gap-6">
+      <h2 class="h-section max-w-[22ch] text-ink-950">Capacidades, con la prueba al lado</h2>
+      <p class="max-w-[46ch] text-[0.95rem] leading-relaxed text-ink-600">
+        Qué sé hacer, con qué herramientas y dónde comprobarlo: cada línea remite a un proyecto publicado,
+        una acreditación o una experiencia concreta.
+      </p>
+    </div>
+
+    <ol class="mt-12 flex flex-col gap-px overflow-hidden rounded-lg border border-ink-100 bg-ink-100">
+      {capabilities.map((c, i) => (
+        <li class="reveal grid gap-5 bg-ink-50 p-6 md:grid-cols-[2.5rem_1fr] md:gap-x-7 md:p-8 lg:grid-cols-[2.5rem_1.2fr_1fr_1fr]">
+          <span class="font-mono text-[0.8rem] tabular-nums text-brand-600">{String(i + 1).padStart(2, '0')}</span>
+          <div>
+            <h3 class="h-display text-[1.08rem] font-semibold leading-snug text-ink-950" style="text-wrap:balance">{c.title}</h3>
+            <p class="mt-2 max-w-[48ch] text-[0.93rem] leading-relaxed text-ink-600">{c.body}</p>
+          </div>
+          <div class="md:col-start-2 lg:col-start-auto">
+            <p class="font-mono text-[0.68rem] uppercase tracking-[0.12em] text-ink-400">Herramientas</p>
+            <ul class="mt-2.5 flex flex-wrap gap-1.5">
+              {c.skills.map(s => (
+                <li class="rounded-sm border border-ink-200 bg-white px-2 py-0.5 text-[0.78rem] text-ink-700">{s}</li>
+              ))}
+            </ul>
+          </div>
+          <div class="md:col-start-2 lg:col-start-auto">
+            <p class="font-mono text-[0.68rem] uppercase tracking-[0.12em] text-ink-400">Dónde se ve</p>
+            <ul class="mt-2.5 flex flex-col gap-1.5 text-[0.88rem] leading-snug">
+              {c.evidence.map(e => (
+                <li>
+                  {e.href
+                    ? <a href={e.href} class="text-brand-700 underline decoration-brand-200 underline-offset-2 transition-colors hover:decoration-brand-500">{e.label}</a>
+                    : <span class="text-ink-700">{e.label}</span>}
+                </li>
+              ))}
+            </ul>
+          </div>
+        </li>
+      ))}
+    </ol>
+  </div>
+</section>

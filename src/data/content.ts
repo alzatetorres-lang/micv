@@ -1,8 +1,10 @@
-import { cvs } from './site';
+import { cvs, facts } from './site';
 
 export interface Service { title: string; body: string }
 export interface FaqItem { q: string; a: string }
 export interface CrossLink { href: string; label: string }
+
+export interface Stat { value: string; label: string }
 
 export interface Profile {
   slug: string;
@@ -15,6 +17,7 @@ export interface Profile {
   claim: string;         // frase-tesis bajo el hero
   ctaPrimary: { label: string; href: string };
   ctaSecondary?: { label: string; href: string };
+  stats?: Stat[];        // cifras verificables bajo los CTA
   cv?: string;
   services: Service[];
   servicesNote?: string;
@@ -24,6 +27,9 @@ export interface Profile {
   crossLinks: CrossLink[];
   showTimeline: boolean;
   showPortfolio: boolean;
+  /** Portfolio y capacidades justo después del hero, antes de los servicios. */
+  portfolioFirst?: boolean;
+  showCapabilities?: boolean;
   showAbout: boolean;
 }
 
@@ -89,38 +95,178 @@ export const formacion = [
 /* Portfolio                                                           */
 /* ------------------------------------------------------------------ */
 
-export const projects = [
+export interface Project {
+  slug: string;          // ancla: /casos#slug
+  name: string;
+  sector: string;
+  url: string;
+  img: string;
+  status: 'En producción' | 'Pre-lanzamiento';
+  tags: string[];
+  resumen: string;       // una frase, para la home
+  reto: string;
+  solucion: string;
+  destacados?: string[]; // funcionalidades comprobables en la web publicada
+  stack: string;
+  resultado: string;
+}
+
+export const projects: Project[] = [
   {
-    name: 'Norden Barber', sector: 'Barbería · Reservas',
-    url: 'https://barbernorden.vercel.app', img: '/img/portfolio/norden-barber.webp',
+    slug: 'logistikos', name: 'Logístikos', sector: 'Formación in company · Logística B2B',
+    url: 'https://logistikos.pro', img: '/img/portfolio/logistikos.webp', status: 'En producción',
+    tags: ['Next.js', 'React', 'Tailwind CSS', 'API serverless', 'schema.org', 'Netlify'],
+    resumen: 'Web B2B de nueve páginas para una consultora de formación logística: simulador de crédito FUNDAE, formulario con API propia y cookies conforme a la guía de la AEPD.',
+    reto: 'Vender formación a medida a direcciones de operaciones que desconfían de los cursos de catálogo, y explicar la bonificación FUNDAE sin convertir la web en un folleto administrativo.',
+    solucion: 'Nueve páginas por intención de búsqueda (programas, metodología, sectores, FUNDAE y contacto), cada área de formación enlazada a su programa y tres vías de conversión: formulario, videollamada de 15 minutos y WhatsApp.',
+    destacados: [
+      'Simulador orientativo de crédito FUNDAE con controles deslizantes accesibles: plantilla y horas previstas.',
+      'Formulario segmentado (empresa, área, participantes) con endpoint propio y antispam sin captcha: campo trampa y tiempo mínimo de relleno.',
+      'Gestor de consentimiento propio: Google Analytics no se descarga hasta que el usuario acepta la medición.',
+      'Datos estructurados por página: organización con catálogo de servicios, cursos, FAQ, contacto y migas de pan.',
+    ],
+    stack: 'Next.js (React) con generación estática, Tailwind CSS, función serverless para el formulario, schema.org y despliegue en Netlify.',
+    resultado: 'Un servicio complejo explicado en términos de coste, stock y transporte, preparado para posicionar por área de formación y para medir sin incumplir la normativa de cookies.',
+  },
+  {
+    slug: 'prom-ibs', name: 'PROM International Business School', sector: 'Educación · Escuela de negocios',
+    url: 'https://promib.school', img: '/img/portfolio/promib-school.webp', status: 'Pre-lanzamiento',
+    tags: ['HTML', 'CSS', 'JavaScript', 'Vídeo adaptativo', 'Hostinger'],
+    resumen: 'Página de pre-lanzamiento con vídeo a pantalla completa: versión vertical en móvil, horizontal en escritorio y dominio activo desde el primer día.',
+    reto: 'Ocupar el dominio de una escuela de negocios que aún no ha lanzado su oferta, con una imagen cuidada y sin indexar contenido provisional.',
+    solucion: 'Página única con vídeo a pantalla completa que elige el corte según la orientación de la pantalla, póster mientras carga y reproducción silenciada compatible con iOS.',
+    destacados: [
+      'Dos cortes de vídeo: 720p vertical para móvil (menos de 0,5 MB) y 1080p horizontal para escritorio (menos de 2 MB), que se intercambian al girar o redimensionar.',
+      'Póster específico por formato: la primera impresión nunca es una pantalla vacía.',
+      'Autoplay silenciado con playsinline y reintento tras el primer toque si el navegador lo bloquea.',
+      'Etiqueta noindex mientras dure el pre-lanzamiento, para no posicionar una página provisional.',
+    ],
+    stack: 'HTML, CSS y JavaScript sin dependencias, vídeo MP4 en dos resoluciones y alojamiento en Hostinger.',
+    resultado: 'Marca y dominio activos con un mantenimiento mínimo, listos para sustituirse por la web completa en el lanzamiento.',
+  },
+  {
+    slug: 'norden-barber', name: 'Norden Barber', sector: 'Barbería · Reservas',
+    url: 'https://barbernorden.vercel.app', img: '/img/portfolio/norden-barber.webp', status: 'En producción',
+    tags: ['HTML', 'CSS', 'JavaScript', 'SEO local', 'WebP'],
+    resumen: 'Landing orientada a reserva para una barbería de Cuenca: servicios, precios y llamada a la cita visibles desde el primer vistazo en el móvil.',
     reto: 'Ordenar servicios, precios, tono visual y llamada a reserva en una experiencia rápida, especialmente en móvil.',
     solucion: 'Landing visual, jerarquía clara de servicios, CTA visible y estructura preparada para posicionar búsquedas de barbería de proximidad.',
     stack: 'HTML, CSS, JavaScript, imágenes WebP y despliegue estático.',
     resultado: 'Una presencia digital enfocada a reserva, fácil de compartir y con identidad propia.',
   },
   {
-    name: 'Stefania Panzariu Studio', sector: 'Estética · Branding',
-    url: 'https://stefaniavictoria.com', img: '/img/portfolio/stefania-studio.webp',
+    slug: 'stefania', name: 'Stefania Panzariu Studio', sector: 'Estética · Branding',
+    url: 'https://stefaniavictoria.com', img: '/img/portfolio/stefania-studio.webp', status: 'En producción',
+    tags: ['React', 'Vite', 'CSS responsive', 'Metadatos sociales'],
+    resumen: 'Web de marca para un estudio de estética y masajes en Cuenca: identidad delicada, servicios claros y captación de citas.',
     reto: 'Convertir una identidad visual delicada en una web clara, elegante y útil para captar citas.',
     solucion: 'Estructura por servicios, copy orientado a confianza, experiencia visual limpia y navegación sin ruido.',
     stack: 'React con Vite, CSS responsive, optimización de imagen y metadatos sociales.',
     resultado: 'Más autoridad visual para servicios premium, preparada para ampliar páginas de tratamientos.',
   },
   {
-    name: 'Promesas de Papel', sector: 'Librería · Cultura',
-    url: 'https://promesasdepapel.com', img: '/img/portfolio/promesas-papel.webp',
+    slug: 'promesas-de-papel', name: 'Promesas de Papel', sector: 'Librería · Cultura',
+    url: 'https://promesasdepapel.com', img: '/img/portfolio/promesas-papel.webp', status: 'En producción',
+    tags: ['HTML', 'CSS', 'JavaScript', 'Diseño editorial'],
+    resumen: 'Web editorial para una librería independiente de Cuenca, preparada para eventos, recomendaciones y comunidad lectora.',
     reto: 'No caer en una web genérica de comercio: el valor estaba en la personalidad, la comunidad y la selección.',
     solucion: 'Diseño editorial, contenido claro y estructura preparada para eventos, recomendaciones y comunicación con lectores.',
     stack: 'HTML, CSS, JavaScript, diseño responsive y optimización de assets.',
     resultado: 'Una presencia online que puede crecer hacia agenda, artículos y clubes de lectura.',
   },
   {
-    name: 'Pinturas COES', sector: 'Industria · E-commerce',
-    url: 'https://pinturascoes.com', img: '/img/portfolio/pinturas-coes.webp',
+    slug: 'pinturas-coes', name: 'Pinturas COES', sector: 'Industria · E-commerce',
+    url: 'https://pinturascoes.com', img: '/img/portfolio/pinturas-coes.webp', status: 'En producción',
+    tags: ['E-commerce', 'Java', 'SQL', 'ERP Sage'],
+    resumen: 'Catálogo técnico y tienda online para un fabricante de pinturas con más de treinta años de marca, integrados con el ERP Sage.',
     reto: 'Pasar de producto técnico a experiencia digital entendible para cliente profesional y usuario final.',
     solucion: 'Catálogo digital, base de datos de productos, arquitectura preparada para ecommerce e integración con el ERP Sage.',
     stack: 'HTML, CSS, JavaScript, Java en servidor, SQL y Sage.',
     resultado: 'Un activo digital industrial con recorrido para fichas de producto, SEO técnico y venta online.',
+  },
+];
+
+/* ------------------------------------------------------------------ */
+/* Capacidades — cada una con la prueba al lado                        */
+/* ------------------------------------------------------------------ */
+
+export interface Capability {
+  title: string;
+  body: string;
+  skills: string[];
+  evidence: { label: string; href?: string }[];
+}
+
+export const capabilities: Capability[] = [
+  {
+    title: 'Desarrollo web a medida',
+    body: 'Webs rápidas y mantenibles, de la arquitectura de contenidos al despliegue, sin plantillas genéricas.',
+    skills: ['Next.js', 'React', 'Astro', 'Tailwind CSS', 'HTML · CSS · JS', 'Vite', 'WebP y carga diferida'],
+    evidence: [
+      { label: 'Logístikos · Next.js', href: '/casos#logistikos' },
+      { label: 'Stefania Panzariu · React', href: '/casos#stefania' },
+      { label: 'Esta web · Astro' },
+    ],
+  },
+  {
+    title: 'SEO técnico y conversión',
+    body: 'Cada página responde a una búsqueda concreta y deja claro el siguiente paso a quien llega.',
+    skills: ['schema.org · JSON-LD', 'Sitemap y canonical', 'SEO local', 'Arquitectura por intención', 'CTA y formularios'],
+    evidence: [
+      { label: 'Logístikos · datos estructurados por página', href: '/casos#logistikos' },
+      { label: 'Norden Barber · SEO local', href: '/casos#norden-barber' },
+      { label: 'Esta web · siete páginas por perfil' },
+    ],
+  },
+  {
+    title: 'Formularios, datos y back-end',
+    body: 'Lo que hay detrás del botón de enviar: validación, antispam, bases de datos e integración con sistemas de gestión.',
+    skills: ['API serverless', 'Antispam sin captcha', 'Java', 'SQL', 'Integración ERP Sage'],
+    evidence: [
+      { label: 'Logístikos · endpoint de contacto propio', href: '/casos#logistikos' },
+      { label: 'Pinturas COES · catálogo y Sage', href: '/casos#pinturas-coes' },
+      { label: 'Backend Java HbbTV · Praga', href: '/#trayectoria' },
+    ],
+  },
+  {
+    title: 'Privacidad y cumplimiento web',
+    body: 'RGPD, LSSI y cookies aplicados en el código, no solo en el texto legal.',
+    skills: ['RGPD y LOPDGDD', 'Guía de cookies AEPD', 'Bloqueo previo de analítica', 'Aviso legal y privacidad'],
+    evidence: [
+      { label: 'Logístikos · gestor de consentimiento propio', href: '/casos#logistikos' },
+      { label: 'Esta web · sin cookies de seguimiento', href: '/privacidad' },
+      { label: 'Expedientes con datos de alumnado · F2Prom', href: '/#trayectoria' },
+    ],
+  },
+  {
+    title: 'Formación subvencionada y LMS',
+    body: 'La parte técnica y la administrativa de la formación para el empleo, para que plataforma y expediente digan lo mismo.',
+    skills: ['FUNDAE', 'FOCO · JCCM', 'Programaciones SEPE', 'Moodle', 'Justificación económica'],
+    evidence: [
+      { label: 'F2Prom · gestión y justificación', href: '/tecnico' },
+      { label: 'Logístikos · simulador de crédito FUNDAE', href: '/casos#logistikos' },
+      { label: 'ADGD01 registrado en FOCO', href: '/calidad' },
+    ],
+  },
+  {
+    title: 'Docencia técnica con IA',
+    body: 'Enseño lo que uso en producción, con material propio, evaluación por rúbrica y la IA como apoyo, no como atajo.',
+    skills: ['Java', 'Bases de datos SQL', 'Data Mining y BI', 'Flipped Classroom', 'Claude · Cursor · NotebookLM'],
+    evidence: [
+      { label: 'Java IFCD052PO · 210 h', href: '/docencia' },
+      { label: 'Data Mining y BI IFCT032PO · 40 h', href: '/docencia' },
+      { label: 'SSCE0110 · nota media 8,2', href: '/docencia' },
+    ],
+  },
+  {
+    title: 'Calidad, costes y datos',
+    body: 'Procedimientos, trazabilidad e indicadores que aguantan una auditoría, con el dato sacado del sistema real.',
+    skills: ['Control documental', 'Auditoría interna', 'Indicadores', 'Contabilidad de costes', 'Excel avanzado', 'SAP FICO · Sage · Dynamics'],
+    evidence: [
+      { label: 'ADGD01 · 425 h', href: '/calidad' },
+      { label: 'F2Prom · calidad interna y costes', href: '/calidad' },
+      { label: 'CaixaBank · CRM y datos de clientes', href: '/#trayectoria' },
+    ],
   },
 ];
 
@@ -135,7 +281,7 @@ export const about = {
     { k: 'Área',      v: 'Cuenca y provincia · remoto' },
     { k: 'Situación', v: 'Autónomo disponible' },
     { k: 'Idiomas',   v: 'Español · Inglés B1 · Alemán A2' },
-    { k: 'Desarrollo',v: 'Java · SQL · HTML/CSS/JS' },
+    { k: 'Desarrollo',v: 'Next.js · React · Astro · Java · SQL' },
     { k: 'Sistemas',  v: 'Sage · SAP FICO · Dynamics · Moodle' },
     { k: 'También',   v: 'IA aplicada · Drones (AESA)' },
   ],
@@ -145,54 +291,49 @@ export const about = {
 /* Las 7 páginas                                                       */
 /* ------------------------------------------------------------------ */
 
-const CTA_HABLEMOS = { label: 'Hablemos', href: '#contacto' };
-
 export const profiles: Profile[] = [
   /* ---------------------------------------------------------------- 1 */
   {
     slug: 'home', route: '/',
-    title: 'Natanael Alzate Torres · Software, formación y calidad',
-    description: 'Analista programador y docente acreditado por el SEPE. Webs a medida, automatización con IA, gestión de formación FUNDAE/FOCO y sistemas de calidad. Cuenca y remoto.',
-    eyebrow: 'Cuenca · remoto · autónomo disponible',
-    h1: 'Programo webs, automatizo procesos y formo equipos para que tu empresa trabaje mejor y pueda demostrarlo.',
+    title: 'Natanael Alzate Torres · Portfolio: webs, formación y calidad',
+    description: 'Portfolio de Natanael Alzate Torres: seis webs publicadas en Next.js, React y Astro, docencia IT acreditada, formación FUNDAE y FOCO y calidad ADGD01.',
+    eyebrow: 'Portfolio · Cuenca y remoto · autónomo disponible',
+    h1: 'Construyo webs y sistemas que funcionan en producción, y formo a los equipos que los usan.',
     intro: [
-      'Soy Natanael Alzate Torres: analista programador y docente técnico acreditado por el SEPE. Trabajo desde Cuenca para negocios de proximidad, centros de formación y empresas que necesitan tecnología útil y documentación que aguante una revisión.',
-      'Si llegaste hasta aquí desde una web que diseñé, esto es lo que hay detrás: análisis de negocio, código limpio, criterio docente y bastante obsesión por que cada pantalla tenga sentido.',
+      'Soy Natanael Alzate Torres, analista programador y docente técnico acreditado por el SEPE. Aquí está lo que he construido, las capacidades que hay detrás y dónde comprobar cada una: todos los proyectos están publicados y enlazados.',
+      'Si llegas desde el pie de una web firmada por Nathan Torres, estás en el sitio correcto: es mi firma como desarrollador.',
     ],
-    claim: 'Grado en ADE, ocho años en IT desde 2017 y acreditación oficial en docencia: la mezcla de aula, código y negocio que convierte tecnología compleja en algo que tu equipo entiende, usa y mantiene.',
-    ctaPrimary: CTA_HABLEMOS,
-    ctaSecondary: { label: 'Ver mi trabajo', href: '/casos' },
+    claim: 'ADE, desarrollo de software y acreditación docente: entiendo el negocio, programo la solución y la explico para que tu equipo la use y la mantenga sin depender de mí.',
+    ctaPrimary: { label: 'Ver proyectos', href: '#trabajo' },
+    ctaSecondary: { label: 'Hablemos', href: '#contacto' },
+    stats: [
+      { value: String(facts.proyectosPublicados), label: 'webs publicadas y enlazadas' },
+      { value: `${facts.horasImpartidas} h`, label: 'de docencia IT impartidas' },
+      { value: `${facts.horasCalidad} h`, label: 'de formación en calidad' },
+      { value: String(facts.anosDesde), label: 'primer software en producción' },
+    ],
     services: [
-      { title: 'Webs a medida para negocios que necesitan vender mejor', body: 'Diseño y programo páginas rápidas, claras y mantenibles para empresas locales, comercios y proyectos profesionales. Sin plantilla genérica: contenido, estructura y código pensados para que Google entienda el servicio y el cliente sepa qué hacer.' },
+      { title: 'Webs a medida para negocios que necesitan vender mejor', body: 'Diseño y programo páginas rápidas, claras y mantenibles para empresas, comercios y proyectos profesionales. Sin plantilla genérica: contenido, estructura y código pensados para que Google entienda el servicio y el cliente sepa qué hacer.' },
       { title: 'Automatización de procesos e IA administrativa', body: 'Detecto las tareas repetitivas que se comen las horas de tu equipo y las convierto en flujos más simples: formularios, bases de datos, informes, agentes de IA y conexiones seguras con ERP como Sage o SAP FICO.' },
       { title: 'Formación técnica, LMS y cumplimiento e-learning', body: 'Formo a equipos y dejo plataformas Moodle, documentación SEPE, FOCO y FUNDAE listas para revisión. La parte técnica y la didáctica van juntas: menos improvisación, más trazabilidad.' },
     ],
     servicesNote: 'Primero mapa de negocio; después arquitectura, contenido y automatización. El resultado no es solo una web bonita: es un sistema pequeño, rápido y medible que se puede explicar, mantener y mejorar.',
-    extras: {
-      heading: 'Pensado para negocios que necesitan moverse mejor',
-      items: [
-        { title: 'Comercios y servicios', body: 'Webs que explican qué haces, eliminan dudas y llevan al cliente a reservar, llamar o escribir sin perderse.' },
-        { title: 'Centros de formación', body: 'LMS, documentación, programaciones, FUNDAE y FOCO con visión técnica y docente, no solo administrativa.' },
-        { title: 'Pymes con procesos manuales', body: 'Automatización de informes, formularios, expedientes, CRM y tareas repetitivas con IA controlada.' },
-        { title: 'Marcas que quieren escalar', body: 'Arquitectura web preparada para casos, servicios, SEO, catálogo, datos y mejoras progresivas.' },
-      ],
-    },
     faq: [
-      { q: '¿Haces webs para negocios pequeños o solo proyectos técnicos?', a: 'Trabajo especialmente bien con negocios de proximidad, comercios, profesionales y pymes. Si necesitas web, contenido, estructura y llamadas a acción claras, puedes ver los casos completos.' },
+      { q: '¿Haces webs para negocios pequeños o solo proyectos técnicos?', a: 'Las dos cosas: desde una landing de reservas para una barbería hasta una web B2B de nueve páginas con simulador y API propia. Cada proyecto de esta página enlaza a la web publicada para que lo compruebes.' },
       { q: '¿Puedes automatizar tareas administrativas con IA?', a: 'Sí. Empiezo con un diagnóstico pequeño: qué tarea se repite, qué dato se usa, quién valida y qué herramienta ya existe. La página de automatización detalla proceso y entregables.' },
-      { q: '¿Trabajas presencial y en remoto?', a: 'Ambos. Para proyectos locales la cercanía ayuda; para automatización y formación técnica pesa más la documentación que la distancia.' },
+      { q: '¿Trabajas presencial y en remoto?', a: 'Ambos. Para proyectos locales la cercanía ayuda; para desarrollo, automatización y formación técnica pesa más la documentación que la distancia.' },
       { q: '¿Puedes ayudar a centros de formación con Moodle, FOCO o FUNDAE?', a: 'Sí, es una de mis líneas principales: programaciones didácticas, seguimiento, auditorías y soporte técnico de plataforma.' },
-      { q: '¿Qué pasa después de publicar la web?', a: 'Se mide: indexación, rendimiento, consultas reales en Search Console y comportamiento de formularios o llamadas. Con esos datos se ajustan contenidos y enlaces internos.' },
+      { q: '¿Cómo prefieres que te contacten?', a: 'Por el formulario de esta página o por correo. Contesto yo, por escrito y en menos de 24 horas laborables: así la propuesta queda documentada desde el primer mensaje.' },
     ],
     crossLinks: [
+      { href: '/casos', label: 'Proyectos' },
       { href: '/docencia', label: 'Docencia IT' },
       { href: '/tecnico', label: 'Formación y LMS' },
       { href: '/calidad', label: 'Calidad' },
       { href: '/administracion', label: 'Administración' },
       { href: '/automatizacion-ia', label: 'Automatización con IA' },
-      { href: '/casos', label: 'Casos de éxito' },
     ],
-    showTimeline: true, showPortfolio: true, showAbout: true,
+    showTimeline: true, showPortfolio: true, portfolioFirst: true, showCapabilities: true, showAbout: true,
   },
 
   /* ---------------------------------------------------------------- 2 */
@@ -233,7 +374,7 @@ export const profiles: Profile[] = [
       { href: '/tecnico', label: 'Formación y LMS' },
       { href: '/calidad', label: 'Calidad' },
       { href: '/administracion', label: 'Administración' },
-      { href: '/casos', label: 'Casos de éxito' },
+      { href: '/casos', label: 'Proyectos' },
     ],
     showTimeline: true, showPortfolio: false, showAbout: true,
   },
@@ -368,7 +509,7 @@ export const profiles: Profile[] = [
       { href: '/automatizacion-ia', label: 'Automatización con IA' },
       { href: '/calidad', label: 'Calidad' },
       { href: '/tecnico', label: 'Formación y LMS' },
-      { href: '/casos', label: 'Casos de éxito' },
+      { href: '/casos', label: 'Proyectos' },
     ],
     showTimeline: true, showPortfolio: false, showAbout: true,
   },
@@ -415,7 +556,7 @@ export const profiles: Profile[] = [
     ],
     crossLinks: [
       { href: '/administracion', label: 'Administración' },
-      { href: '/casos', label: 'Casos de éxito' },
+      { href: '/casos', label: 'Proyectos' },
       { href: '/tecnico', label: 'Formación y LMS' },
     ],
     showTimeline: false, showPortfolio: true, showAbout: false,
@@ -424,19 +565,21 @@ export const profiles: Profile[] = [
   /* ---------------------------------------------------------------- 7 */
   {
     slug: 'casos', route: '/casos',
-    title: 'Casos de éxito · Webs a medida e integración',
-    description: 'Cuatro proyectos en producción: reservas para barbería, estudio de estética, librería cultural y e-commerce industrial con integración ERP Sage.',
-    eyebrow: 'Cuatro proyectos en producción',
-    h1: 'Webs reales para negocios que necesitan verse mejor, vender con más claridad y ordenar su presencia digital.',
+    title: 'Proyectos · Webs a medida publicadas',
+    description: 'Seis webs publicadas con reto, solución, stack y resultado: formación logística B2B en Next.js, escuela de negocios, barbería, estética, librería e industria.',
+    eyebrow: 'Seis proyectos publicados · seis sectores',
+    h1: 'Webs reales, publicadas y enlazadas: qué pedía cada negocio, qué construí y con qué.',
     intro: [
       'No vendo páginas bonitas como si fueran cuadros. Un buen proyecto web tiene que aclarar el servicio, reducir fricción, transmitir confianza y dejar una base técnica que no se rompa cuando el negocio crece.',
-      'Estos casos muestran cuatro tipos de trabajo: reserva online, marca personal, comercio cultural e industria con catálogo técnico.',
+      'Seis casos, seis sectores: formación in company B2B, una escuela de negocios en pre-lanzamiento, reserva online, marca personal, comercio cultural e industria con catálogo técnico.',
     ],
     claim: 'La misma lógica para sectores distintos: entender el negocio, diseñar la ruta del cliente y programar una web que Google y las personas puedan leer sin esfuerzo.',
     ctaPrimary: { label: 'Quiero algo parecido', href: '#contacto' },
+    ctaSecondary: { label: 'Ver capacidades', href: '#capacidades' },
     services: [],
     faq: [
       { q: '¿El diseño empieza por estética o por negocio?', a: 'Por negocio. Primero se define qué debe hacer la web: reservar, captar contactos, explicar servicios, ordenar catálogo o reducir preguntas repetidas. Después se diseña.' },
+      { q: '¿Con qué tecnología trabajas?', a: 'La que pide el proyecto: HTML, CSS y JavaScript sin dependencias para una página ligera, React o Next.js cuando hay interacción y muchas páginas, y Astro para webs de contenido como esta.' },
       { q: '¿Se puede añadir automatización después?', a: 'Sí. Una web bien planteada puede crecer hacia formularios inteligentes, bases de datos, informes y flujos automatizados.' },
       { q: '¿También trabajas con centros de formación?', a: 'Sí. Para LMS, FUNDAE, FOCO y programaciones didácticas, el perfil enfocado es el de técnico de formación.' },
     ],
@@ -445,7 +588,7 @@ export const profiles: Profile[] = [
       { href: '/administracion', label: 'Administración' },
       { href: '/', label: 'Inicio' },
     ],
-    showTimeline: false, showPortfolio: true, showAbout: false,
+    showTimeline: false, showPortfolio: true, showCapabilities: true, showAbout: false,
   },
 ];
 
