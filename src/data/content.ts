@@ -102,6 +102,8 @@ export interface Project {
   url: string;
   img: string;
   status: 'En producción' | 'Pre-lanzamiento';
+  /** Dominio aún sin activar: se muestra la ficha sin enlazar. */
+  proximamente?: boolean;
   tags: string[];
   resumen: string;       // una frase, para la home
   reto: string;
@@ -130,9 +132,9 @@ export const projects: Project[] = [
   },
   {
     slug: 'prom-ibs', name: 'PROM International Business School', sector: 'Educación · Escuela de negocios',
-    url: 'https://promibs.school', img: '/img/portfolio/promib-school.webp', status: 'Pre-lanzamiento',
+    url: 'https://promibs.school', img: '/img/portfolio/promib-school.webp', status: 'Pre-lanzamiento', proximamente: true,
     tags: ['HTML', 'CSS', 'JavaScript', 'Vídeo adaptativo', 'Hostinger'],
-    resumen: 'Página de pre-lanzamiento con vídeo a pantalla completa: versión vertical en móvil, horizontal en escritorio y dominio activo desde el primer día.',
+    resumen: 'Página de pre-lanzamiento con vídeo a pantalla completa: versión vertical en móvil, horizontal en escritorio y marca presente antes del lanzamiento.',
     reto: 'Ocupar el dominio de una escuela de negocios que aún no ha lanzado su oferta, con una imagen cuidada y sin indexar contenido provisional.',
     solucion: 'Página única con vídeo a pantalla completa que elige el corte según la orientación de la pantalla, póster mientras carga y reproducción silenciada compatible con iOS.',
     destacados: [
@@ -142,7 +144,7 @@ export const projects: Project[] = [
       'Etiqueta noindex mientras dure el pre-lanzamiento, para no posicionar una página provisional.',
     ],
     stack: 'HTML, CSS y JavaScript sin dependencias, vídeo MP4 en dos resoluciones y alojamiento en Hostinger.',
-    resultado: 'Marca y dominio activos con un mantenimiento mínimo, listos para sustituirse por la web completa en el lanzamiento.',
+    resultado: 'Marca presente con un mantenimiento mínimo, listos para sustituirse por la web completa en el lanzamiento.',
   },
   {
     slug: 'norden-barber', name: 'Norden Barber', sector: 'Barbería · Reservas',

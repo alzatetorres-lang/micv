@@ -53,7 +53,9 @@ const live = (p: Project) => p.status === 'En producción';
             <ul class="mt-5 flex flex-wrap gap-1.5" aria-label="Tecnologías">
               {p.tags.map(t => <li class="chip">{t}</li>)}
             </ul>
-            <a href={p.url} rel="noopener" class="btn btn-ghost mt-6 text-[0.85rem]">Ver web publicada ↗</a>
+            {p.proximamente
+              ? <p class="mt-6 font-mono text-[0.78rem] text-ink-400">Próximamente en {new URL(p.url).host}</p>
+              : <a href={p.url} rel="noopener" class="btn btn-ghost mt-6 text-[0.85rem]">Ver web publicada ↗</a>}
           </div>
         </article>
       ))}
@@ -103,7 +105,9 @@ const live = (p: Project) => p.status === 'En producción';
               {p.tags.map(t => <li class="chip">{t}</li>)}
             </ul>
             <p class="mt-auto flex flex-wrap gap-x-5 gap-y-2 pt-5 text-[0.86rem] font-medium">
-              <a href={p.url} rel="noopener" class="text-brand-700 underline decoration-brand-200 underline-offset-2 hover:decoration-brand-500">Web publicada ↗</a>
+              {p.proximamente
+                ? <span class="text-ink-400">Próximamente en {new URL(p.url).host}</span>
+                : <a href={p.url} rel="noopener" class="text-brand-700 underline decoration-brand-200 underline-offset-2 hover:decoration-brand-500">Web publicada ↗</a>}
               <a href={`/casos#${p.slug}`} class="text-ink-600 underline decoration-ink-200 underline-offset-2 hover:text-brand-700">Caso completo</a>
             </p>
           </article>
