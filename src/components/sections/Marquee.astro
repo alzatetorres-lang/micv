@@ -1,0 +1,22 @@
+---
+import { capabilities } from '../../data/content';
+// Scroll Based Velocity (Magic UI, 21st.dev) portado: dos bandas en sentidos
+// opuestos que aceleran y cambian de dirección con el scroll.
+const tools = [...new Set(capabilities.flatMap(c => c.skills))];
+const half = Math.ceil(tools.length / 2);
+const rows = [tools.slice(0, half), tools.slice(half)];
+---
+<section class="velocity relative overflow-hidden border-y border-ink-100 py-10 md:py-14" aria-label="Herramientas con las que trabajo">
+  <ul class="sr-only">{tools.map(t => <li>{t}</li>)}</ul>
+  {rows.map((row, r) => (
+    <div class="velocity-row" data-velocity={r === 0 ? 38 : -38} aria-hidden="true">
+      <div class="velocity-track" data-velocity-track>
+        {[0, 1].map(() => (
+          <span class:list={['velocity-set', r === 1 && 'velocity-outline']}>
+            {row.map(t => <span class="velocity-item">{t}<span class="velocity-sep">/</span></span>)}
+          </span>
+        ))}
+      </div>
+    </div>
+  ))}
+</section>

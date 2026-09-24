@@ -1,37 +1,46 @@
 ---
 import { timeline, formacion } from '../../data/content';
 import { facts } from '../../data/site';
+import ChapterLabel from '../ChapterLabel.astro';
+// Timeline + Tracing Beam (Aceternity, 21st.dev) portados: los años quedan
+// fijos a la izquierda y un rayo de luz recorre la trayectoria con el scroll.
 ---
-<section id="trayectoria" class="border-y border-ink-100 bg-white/50">
-  <div class="container-x py-20 md:py-24">
+<section id="trayectoria" data-chapter="Trayectoria" class="border-y border-ink-100 bg-white/50">
+  <div class="container-x py-20 md:py-28">
     <div class="flex flex-wrap items-end justify-between gap-6">
-      <h2 class="h-section max-w-[22ch] text-ink-950">Trayectoria desde {facts.anosDesde}</h2>
+      <div>
+        <ChapterLabel title="Trayectoria" />
+        <h2 class="h-section mt-3 max-w-[22ch] text-ink-950">Trayectoria desde {facts.anosDesde}</h2>
+      </div>
       <p class="max-w-[40ch] text-[0.95rem] leading-relaxed text-ink-600">
         Del backend de televisión interactiva en Praga al aula y a la consultoría. Desde 2017 sin salir del terreno técnico.
       </p>
     </div>
 
-    <ol class="nx-tl mt-12 flex flex-col gap-10">
-      {timeline.map(t => (
-        <li class="reveal relative grid gap-3 pl-9 md:grid-cols-[9.5rem_1fr] md:gap-9 md:pl-11">
-          <span class="nx-tl-dot" aria-hidden="true"></span>
-          <div>
-            <p class="font-mono text-[0.78rem] tabular-nums text-brand-600">{t.years}</p>
-            <p class="mt-1 text-[0.82rem] font-medium text-ink-400">{t.org}</p>
-          </div>
-          <div class="max-w-[66ch]">
-            <h3 class="h-display text-[1.05rem] font-semibold text-ink-950">{t.role}</h3>
-            <p class="mt-2 text-[0.94rem] leading-relaxed text-ink-600">{t.body}</p>
-            <p class="mt-2.5 border-l-2 border-brand-200 pl-3 text-[0.9rem] leading-relaxed text-ink-700">{t.result}</p>
-          </div>
-        </li>
-      ))}
-    </ol>
+    <div class="tl relative mt-14" data-beam>
+      <span class="tl-rail" aria-hidden="true"><span class="tl-beam" data-beam-line></span></span>
+      <ol class="flex flex-col gap-14 md:gap-24">
+        {timeline.map(t => (
+          <li class="relative grid gap-3 pl-10 md:grid-cols-[14rem_1fr] md:gap-12 md:pl-16">
+            <span class="tl-dot" data-beam-dot aria-hidden="true"></span>
+            <div class="md:sticky md:top-28 md:self-start">
+              <p class="tl-year h-display">{t.years}</p>
+              <p class="mt-1.5 text-[0.85rem] font-medium text-ink-400">{t.org}</p>
+            </div>
+            <div class="reveal max-w-[66ch]">
+              <h3 class="h-display text-[1.2rem] font-semibold leading-snug text-ink-950">{t.role}</h3>
+              <p class="mt-2.5 text-[0.97rem] leading-relaxed text-ink-600">{t.body}</p>
+              <p class="mt-3 border-l-2 border-brand-300 pl-3 text-[0.92rem] leading-relaxed text-ink-700">{t.result}</p>
+            </div>
+          </li>
+        ))}
+      </ol>
+    </div>
 
-    <h3 class="h-display mt-16 text-[1.15rem] font-semibold text-ink-950">Formación y acreditaciones</h3>
+    <h3 class="h-display mt-20 text-[1.15rem] font-semibold text-ink-950">Formación y acreditaciones</h3>
     <dl class="mt-6 grid gap-x-10 gap-y-6 sm:grid-cols-2">
       {formacion.map(f => (
-        <div class="border-t border-ink-200 pt-4">
+        <div class="reveal border-t border-ink-200 pt-4">
           <dt class="flex items-baseline gap-3">
             <span class="shrink-0 font-mono text-[0.75rem] tabular-nums text-brand-600">{f.year}</span>
             <span class="h-display text-[0.98rem] font-semibold text-ink-950">{f.title}</span>
@@ -44,32 +53,52 @@ import { facts } from '../../data/site';
 </section>
 
 <style>
-  .nx-tl { position: relative; }
-  .nx-tl::before {
-    content: "";
+  .tl-rail {
     position: absolute;
-    top: .55rem;
-    bottom: .55rem;
-    left: 5px;
+    top: .6rem;
+    bottom: .6rem;
+    left: 7px;
     width: 2px;
-    background: linear-gradient(to bottom,
-      transparent 0,
-      var(--color-brand-300) 6%,
-      var(--color-brand-500) 50%,
-      var(--color-brand-300) 94%,
-      transparent 100%);
+    overflow: hidden;
+    background: linear-gradient(to bottom, transparent, var(--color-ink-200) 8%, var(--color-ink-200) 92%, transparent);
   }
-  .nx-tl-dot {
+  .tl-beam {
+    position: absolute;
+    inset: 0;
+    transform-origin: top;
+    transform: scaleY(1);
+    background: linear-gradient(to bottom, transparent 0%, var(--color-brand-300) 6%, var(--color-brand-500) 60%, var(--color-gold-500) 100%);
+    box-shadow: 0 0 12px var(--color-brand-300);
+  }
+  :global(html.story-on) .tl-beam { transform: scaleY(0); }
+  .tl-dot {
     position: absolute;
     left: 0;
-    top: .45rem;
-    width: 12px;
-    height: 12px;
+    top: .5rem;
+    width: 16px;
+    height: 16px;
     border-radius: 999px;
     background: var(--color-ink-50);
     border: 2px solid var(--color-brand-500);
+    transition: background .4s, box-shadow .4s, transform .4s var(--ease-out-expo);
   }
+  :global(html.story-on) .tl-dot { border-color: var(--color-ink-300); }
+  :global(html.story-on) .tl-dot.is-lit {
+    border-color: var(--color-brand-500);
+    background: var(--color-brand-500);
+    box-shadow: 0 0 0 6px rgba(23, 150, 163, .15), 0 0 18px rgba(23, 150, 163, .45);
+    transform: scale(1.1);
+  }
+  .tl-year {
+    font-size: clamp(1.5rem, 2.8vw, 2.4rem);
+    line-height: 1;
+    letter-spacing: -0.03em;
+    color: var(--color-ink-300);
+    transition: color .5s;
+  }
+  li:has(.tl-dot.is-lit) .tl-year,
+  :global(html:not(.story-on)) .tl-year { color: var(--color-brand-700); }
   @media (min-width: 768px) {
-    .nx-tl::before { left: 5px; }
+    .tl-rail { left: 7px; }
   }
 </style>

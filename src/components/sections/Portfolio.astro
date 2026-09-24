@@ -1,15 +1,19 @@
 ---
 import { projects, type Project } from '../../data/content';
 import Shot from '../Shot.astro';
+import ChapterLabel from '../ChapterLabel.astro';
 interface Props { detailed?: boolean }
 const { detailed = false } = Astro.props;
-const [featured, ...rest] = projects;
 const live = (p: Project) => p.status === 'En producción';
-// En la home: el primer proyecto (el más completo) va destacado a todo el ancho.
+// Home: Stacking Cards (Daniel Petho, 21st.dev) portado. Cada proyecto se fija
+// y el siguiente se apila encima; las anteriores se reducen (story.ts).
 ---
-<section id="trabajo" class="container-x py-20 md:py-24">
+<section id="trabajo" data-chapter="Proyectos" class="container-x py-20 md:py-28">
   <div class="flex flex-wrap items-end justify-between gap-6">
-    <h2 class="h-section text-ink-950">{detailed ? 'Proyecto a proyecto' : 'Trabajo seleccionado'}</h2>
+    <div>
+      <ChapterLabel title="Proyectos" />
+      <h2 class="h-section mt-3 text-ink-950">{detailed ? 'Proyecto a proyecto' : 'Seis webs, seis historias'}</h2>
+    </div>
     <p class="max-w-[44ch] text-[0.95rem] leading-relaxed text-ink-600">
       {projects.length} webs publicadas. Cada ficha enlaza a la web real: el resultado se comprueba, no se cuenta.
     </p>
@@ -61,69 +65,60 @@ const live = (p: Project) => p.status === 'En producción';
       ))}
     </div>
   ) : (
-    <>
-      <article id={featured.slug} class="reveal mt-12 grid gap-8 rounded-xl border border-ink-100 bg-white/70 p-4 shadow-sm md:grid-cols-[1.1fr_1fr] md:items-center md:gap-10 md:p-6">
-        <Shot project={featured} aspect="aspect-[4/3]" />
-        <div class="px-2 pb-2 md:px-0 md:pb-0">
-          <p class="flex flex-wrap items-center gap-x-3 gap-y-1 font-mono text-[0.72rem] uppercase tracking-[0.12em] text-brand-600">
-            <span>Destacado · {featured.sector}</span>
-          </p>
-          <h3 class="h-display mt-2 text-[1.6rem] font-semibold text-ink-950">{featured.name}</h3>
-          <p class="mt-3 max-w-[54ch] text-[0.97rem] leading-relaxed text-ink-600">{featured.resumen}</p>
-          {featured.destacados && (
-            <ul class="mt-4 flex flex-col gap-2 text-[0.9rem] leading-relaxed text-ink-700">
-              {featured.destacados.slice(0, 3).map(d => (
-                <li class="relative pl-4 before:absolute before:left-0 before:top-[0.7em] before:h-px before:w-2 before:bg-brand-500">{d}</li>
-              ))}
-            </ul>
-          )}
-          <ul class="mt-5 flex flex-wrap gap-1.5" aria-label="Tecnologías">
-            {featured.tags.map(t => <li class="chip">{t}</li>)}
-          </ul>
-          <div class="mt-6 flex flex-wrap gap-3">
-            <a href={featured.url} rel="noopener" class="btn btn-primary text-[0.85rem]">Ver web publicada ↗</a>
-            <a href={`/casos#${featured.slug}`} class="btn btn-ghost text-[0.85rem]">Caso completo</a>
-          </div>
-        </div>
-      </article>
-
-      <div class="mt-10 grid gap-x-8 gap-y-12 sm:grid-cols-2 lg:grid-cols-3">
-        {rest.map(p => (
-          <article id={p.slug} class="reveal flex flex-col">
-            <Shot project={p} aspect="aspect-[3/2]" />
-            <p class="mt-5 flex flex-wrap items-center gap-x-3 gap-y-1 font-mono text-[0.7rem] uppercase tracking-[0.12em] text-brand-600">
-              <span>{p.sector}</span>
-              {!live(p) && (
-                <span class="inline-flex items-center gap-1.5 text-gold-600">
-                  <span class="h-1.5 w-1.5 rounded-full bg-gold-500" aria-hidden="true"></span>{p.status}
-                </span>
+    <div class="stack mt-14" data-stack>
+      {projects.map((p, i) => (
+        <div class="stack-item" style={`--i:${i}`}>
+          <article id={p.slug} class="stack-card" data-stack-card style={`--accent:${p.accent}`}>
+            <div class="stack-copy">
+              <p class="flex items-center justify-between gap-4 font-mono text-[0.72rem] uppercase tracking-[0.12em]">
+                <span class="stack-accent">{p.sector}</span>
+                <span class="tabular-nums text-ink-400">{String(i + 1).padStart(2, '0')} / {String(projects.length).padStart(2, '0')}</span>
+              </p>
+              <h3 class="h-display mt-4 text-[clamp(1.6rem,3vw,2.4rem)] font-semibold leading-[1.05] tracking-[-0.02em] text-ink-950">{p.name}</h3>
+              <p class:list={['mt-2 inline-flex items-center gap-1.5 font-mono text-[0.7rem] uppercase tracking-[0.12em]', live(p) ? 'text-success-600' : 'text-gold-600']}>
+                <span class:list={['h-1.5 w-1.5 rounded-full', live(p) ? 'bg-success-500 dot-live' : 'bg-gold-500']} aria-hidden="true"></span>{p.status}
+              </p>
+              <p class="mt-4 max-w-[48ch] text-[0.96rem] leading-relaxed text-ink-600">{p.resumen}</p>
+              {i === 0 && p.destacados && (
+                <ul class="mt-4 hidden flex-col gap-2 text-[0.88rem] leading-relaxed text-ink-700 lg:flex">
+                  {p.destacados.slice(0, 2).map(d => (
+                    <li class="relative pl-4 before:absolute before:left-0 before:top-[0.7em] before:h-px before:w-2 before:bg-[var(--accent)]">{d}</li>
+                  ))}
+                </ul>
               )}
-            </p>
-            <h3 class="h-display mt-1.5 text-[1.2rem] font-semibold text-ink-950">{p.name}</h3>
-            <p class="mt-2 text-[0.92rem] leading-relaxed text-ink-600">{p.resumen}</p>
-            <ul class="mt-4 flex flex-wrap gap-1.5" aria-label="Tecnologías">
-              {p.tags.map(t => <li class="chip">{t}</li>)}
-            </ul>
-            <p class="mt-auto flex flex-wrap gap-x-5 gap-y-2 pt-5 text-[0.86rem] font-medium">
-              {p.proximamente
-                ? <span class="text-ink-400">Próximamente en {new URL(p.url).host}</span>
-                : <a href={p.url} rel="noopener" class="text-brand-700 underline decoration-brand-200 underline-offset-2 hover:decoration-brand-500">Web publicada ↗</a>}
-              <a href={`/casos#${p.slug}`} class="text-ink-600 underline decoration-ink-200 underline-offset-2 hover:text-brand-700">Caso completo</a>
-            </p>
+              <ul class="mt-5 flex flex-wrap gap-1.5" aria-label="Tecnologías">
+                {p.tags.map(t => <li class="chip">{t}</li>)}
+              </ul>
+              <p class="mt-auto flex flex-wrap items-center gap-x-5 gap-y-2 pt-6 text-[0.88rem] font-medium">
+                {p.proximamente
+                  ? <span class="text-ink-400">Próximamente en {new URL(p.url).host}</span>
+                  : <a href={p.url} rel="noopener" class="btn btn-primary text-[0.84rem]">Ver web publicada ↗</a>}
+                <a href={`/casos#${p.slug}`} class="link-underline text-ink-700">Caso completo</a>
+              </p>
+            </div>
+            <Shot project={p} aspect="aspect-[4/3]" class="stack-shot" />
           </article>
-        ))}
+        </div>
+      ))}
 
-        <aside class="reveal flex flex-col justify-between rounded-xl border border-dashed border-brand-300 bg-brand-50/60 p-7">
-          <div>
-            <p class="font-mono text-[0.7rem] uppercase tracking-[0.12em] text-brand-600">Siguiente proyecto</p>
-            <p class="h-display mt-3 text-[1.3rem] font-semibold leading-snug text-ink-950">¿El tuyo?</p>
-            <p class="mt-3 text-[0.92rem] leading-relaxed text-ink-600">
+      <div class="stack-item" style={`--i:${projects.length}`}>
+        <aside class="stack-card stack-cta" data-stack-card style="--accent:#1796A3">
+          <div class="stack-copy">
+            <p class="font-mono text-[0.72rem] uppercase tracking-[0.12em] stack-accent">Siguiente proyecto</p>
+            <p class="h-display mt-4 text-[clamp(2rem,4vw,3.2rem)] font-semibold leading-[1.02] tracking-[-0.025em] text-ink-950">¿El séptimo es <span class="text-gradient">el tuyo</span>?</p>
+            <p class="mt-4 max-w-[46ch] text-[0.98rem] leading-relaxed text-ink-600">
               Cuéntame qué tiene que conseguir tu web —reservas, contactos, catálogo o captación B2B— y te digo cómo la plantearía, con qué tecnología y en qué plazo.
             </p>
+            <p class="mt-auto flex flex-wrap gap-3 pt-7">
+              <a href="#contacto" class="btn btn-primary">Contar mi proyecto</a>
+              <a href="/casos" class="btn btn-ghost">Ver todos los casos</a>
+            </p>
           </div>
-          <a href="#contacto" class="btn btn-primary mt-7 self-start text-[0.85rem]">Contar mi proyecto</a>
+          <div class="stack-cta-art" aria-hidden="true">
+            <span>07</span>
+          </div>
         </aside>
       </div>
-    </>
+    </div>
   )}
 </section>

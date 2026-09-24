@@ -18,6 +18,11 @@ export interface Profile {
   ctaPrimary: { label: string; href: string };
   ctaSecondary?: { label: string; href: string };
   stats?: Stat[];        // cifras verificables bajo los CTA
+  /** Titular animado: arranque fijo + frases que rotan (la h1 completa queda en `h1`). */
+  h1Lead?: string;
+  rotating?: string[];
+  /** Manifiesto que se ilumina palabra a palabra con el scroll. *palabra* = acento. */
+  manifesto?: string;
   cv?: string;
   services: Service[];
   servicesNote?: string;
@@ -102,6 +107,8 @@ export interface Project {
   url: string;
   img: string;
   status: 'En producción' | 'Pre-lanzamiento';
+  /** Color de marca del cliente: tiñe su tarjeta en el apilado. */
+  accent: string;
   /** Dominio aún sin activar: se muestra la ficha sin enlazar. */
   proximamente?: boolean;
   tags: string[];
@@ -116,7 +123,7 @@ export interface Project {
 export const projects: Project[] = [
   {
     slug: 'logistikos', name: 'Logístikos', sector: 'Formación in company · Logística B2B',
-    url: 'https://logistikos.pro', img: '/img/portfolio/logistikos.webp', status: 'En producción',
+    url: 'https://logistikos.pro', img: '/img/portfolio/logistikos.webp', status: 'En producción', accent: '#1f3df0',
     tags: ['Next.js', 'React', 'Tailwind CSS', 'API serverless', 'schema.org', 'Netlify'],
     resumen: 'Web B2B de nueve páginas para una consultora de formación logística: simulador de crédito FUNDAE, formulario con API propia y cookies conforme a la guía de la AEPD.',
     reto: 'Vender formación a medida a direcciones de operaciones que desconfían de los cursos de catálogo, y explicar la bonificación FUNDAE sin convertir la web en un folleto administrativo.',
@@ -132,7 +139,7 @@ export const projects: Project[] = [
   },
   {
     slug: 'prom-ibs', name: 'PROM International Business School', sector: 'Educación · Escuela de negocios',
-    url: 'https://promibs.school', img: '/img/portfolio/promib-school.webp', status: 'Pre-lanzamiento', proximamente: true,
+    url: 'https://promibs.school', img: '/img/portfolio/promib-school.webp', status: 'Pre-lanzamiento', accent: '#1fb5a8', proximamente: true,
     tags: ['HTML', 'CSS', 'JavaScript', 'Vídeo adaptativo', 'Hostinger'],
     resumen: 'Página de pre-lanzamiento con vídeo a pantalla completa: versión vertical en móvil, horizontal en escritorio y marca presente antes del lanzamiento.',
     reto: 'Ocupar el dominio de una escuela de negocios que aún no ha lanzado su oferta, con una imagen cuidada y sin indexar contenido provisional.',
@@ -148,7 +155,7 @@ export const projects: Project[] = [
   },
   {
     slug: 'norden-barber', name: 'Norden Barber', sector: 'Barbería · Reservas',
-    url: 'https://barbernorden.vercel.app', img: '/img/portfolio/norden-barber.webp', status: 'En producción',
+    url: 'https://barbernorden.vercel.app', img: '/img/portfolio/norden-barber.webp', status: 'En producción', accent: '#b8913b',
     tags: ['HTML', 'CSS', 'JavaScript', 'SEO local', 'WebP'],
     resumen: 'Landing orientada a reserva para una barbería de Cuenca: servicios, precios y llamada a la cita visibles desde el primer vistazo en el móvil.',
     reto: 'Ordenar servicios, precios, tono visual y llamada a reserva en una experiencia rápida, especialmente en móvil.',
@@ -158,7 +165,7 @@ export const projects: Project[] = [
   },
   {
     slug: 'stefania', name: 'Stefania Panzariu Studio', sector: 'Estética · Branding',
-    url: 'https://stefaniavictoria.com', img: '/img/portfolio/stefania-studio.webp', status: 'En producción',
+    url: 'https://stefaniavictoria.com', img: '/img/portfolio/stefania-studio.webp', status: 'En producción', accent: '#b07a6e',
     tags: ['React', 'Vite', 'CSS responsive', 'Metadatos sociales'],
     resumen: 'Web de marca para un estudio de estética y masajes en Cuenca: identidad delicada, servicios claros y captación de citas.',
     reto: 'Convertir una identidad visual delicada en una web clara, elegante y útil para captar citas.',
@@ -168,7 +175,7 @@ export const projects: Project[] = [
   },
   {
     slug: 'promesas-de-papel', name: 'Promesas de Papel', sector: 'Librería · Cultura',
-    url: 'https://promesasdepapel.com', img: '/img/portfolio/promesas-papel.webp', status: 'En producción',
+    url: 'https://promesasdepapel.com', img: '/img/portfolio/promesas-papel.webp', status: 'En producción', accent: '#7a5a3a',
     tags: ['HTML', 'CSS', 'JavaScript', 'Diseño editorial'],
     resumen: 'Web editorial para una librería independiente de Cuenca, preparada para eventos, recomendaciones y comunidad lectora.',
     reto: 'No caer en una web genérica de comercio: el valor estaba en la personalidad, la comunidad y la selección.',
@@ -178,7 +185,7 @@ export const projects: Project[] = [
   },
   {
     slug: 'pinturas-coes', name: 'Pinturas COES', sector: 'Industria · E-commerce',
-    url: 'https://pinturascoes.com', img: '/img/portfolio/pinturas-coes.webp', status: 'En producción',
+    url: 'https://pinturascoes.com', img: '/img/portfolio/pinturas-coes.webp', status: 'En producción', accent: '#2a5aa8',
     tags: ['E-commerce', 'Java', 'SQL', 'ERP Sage'],
     resumen: 'Catálogo técnico y tienda online para un fabricante de pinturas con más de treinta años de marca, integrados con el ERP Sage.',
     reto: 'Pasar de producto técnico a experiencia digital entendible para cliente profesional y usuario final.',
@@ -301,6 +308,14 @@ export const profiles: Profile[] = [
     description: 'Portfolio de Natanael Alzate Torres: seis webs publicadas en Next.js, React y Astro, docencia IT acreditada, formación FUNDAE y FOCO y calidad ADGD01.',
     eyebrow: 'Portfolio · Cuenca y remoto · autónomo disponible',
     h1: 'Construyo webs y sistemas que funcionan en producción, y formo a los equipos que los usan.',
+    h1Lead: 'Construyo',
+    rotating: [
+      'webs que funcionan en producción.',
+      'sistemas que aguantan una auditoría.',
+      'automatizaciones que devuelven horas.',
+      'cursos técnicos que se entienden.',
+    ],
+    manifesto: 'Primero entiendo el *negocio*. Después escribo el *código*. Y al final se lo explico a tu *equipo* para que lo use y lo mantenga sin depender de mí. Así trabajo desde 2017: en Praga, en una fábrica de pinturas, en un banco y en el aula.',
     intro: [
       'Soy Natanael Alzate Torres, analista programador y docente técnico acreditado por el SEPE. Aquí está lo que he construido, las capacidades que hay detrás y dónde comprobar cada una: todos los proyectos están publicados y enlazados.',
       'Si llegas desde el pie de una web firmada por Nathan Torres, estás en el sitio correcto: es mi firma como desarrollador.',

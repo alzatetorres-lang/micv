@@ -1,0 +1,7 @@
+---
+// «Capítulo 0N · Título»: el número lo pone un contador CSS por página
+// (main > [data-chapter]), así la numeración cuadra en cualquier perfil.
+interface Props { title: string; class?: string }
+const { title, class: extra } = Astro.props;
+---
+<p class:list={['chapter-label', extra]}><span>{title}</span></p>

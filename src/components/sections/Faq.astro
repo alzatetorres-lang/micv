@@ -1,5 +1,6 @@
 ---
 import type { FaqItem } from '../../data/content';
+import ChapterLabel from '../ChapterLabel.astro';
 interface Props { items: FaqItem[]; heading?: string }
 const { items, heading = 'Preguntas que suelen decidir un proyecto' } = Astro.props;
 const schema = {
@@ -13,8 +14,9 @@ const schema = {
 };
 ---
 {items.length > 0 && (
-<section id="faq" class="container-x py-20 md:py-24">
-  <h2 class="h-section max-w-[24ch] text-ink-950">{heading}</h2>
+<section id="faq" data-chapter="Preguntas" class="container-x py-20 md:py-28">
+  <ChapterLabel title="Preguntas" />
+  <h2 class="h-section mt-3 max-w-[24ch] text-ink-950">{heading}</h2>
 
   <!-- Lista abierta en vez de acordeón: el contenido queda visible e indexable -->
   <dl class="mt-11 grid gap-x-12 gap-y-8 md:grid-cols-2">

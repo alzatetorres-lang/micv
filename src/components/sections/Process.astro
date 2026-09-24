@@ -1,9 +1,11 @@
 ---
+import ChapterLabel from '../ChapterLabel.astro';
 interface Props { steps: { step: string; body: string }[] }
 const { steps } = Astro.props;
 ---
-<section id="proceso" class="container-x py-20 md:py-24">
-  <h2 class="h-section text-ink-950">Cómo trabajamos</h2>
+<section id="proceso" data-chapter="Proceso" class="container-x py-20 md:py-24">
+  <ChapterLabel title="Proceso" />
+  <h2 class="h-section mt-3 text-ink-950">Cómo trabajamos</h2>
   <ol class="mt-11 grid gap-8 md:grid-cols-4">
     {steps.map((s, i) => (
       <li class="reveal relative pt-6">

@@ -4,27 +4,54 @@ import { site } from '../../data/site';
 interface Props { profile: Profile }
 const { profile: p } = Astro.props;
 // id="home" en la portada: destino de los créditos «Desarrollado por Nathan Torres» de las webs de clientes.
+const animated = Boolean(p.rotating?.length && p.h1Lead);
+// Cifras: «250 h» -> contador 0→250 + sufijo; los años arrancan desde 2000.
+const stats = (p.stats ?? []).map(s => {
+  const m = s.value.match(/^(\d+)(.*)$/);
+  const to = m ? Number(m[1]) : null;
+  return { ...s, to, from: to && to > 1900 ? 2000 : 0, suffix: m ? m[2] : '' };
+});
 ---
-<section id={p.slug === 'home' ? 'home' : undefined} class="relative overflow-hidden border-b border-ink-100">
-  <div class="container-x grid gap-12 py-16 md:py-24 lg:grid-cols-[1.55fr_1fr] lg:items-end">
+<section
+  id={p.slug === 'home' ? 'home' : 'inicio'}
+  data-chapter="Inicio" data-chapter-skip
+  class:list={['relative overflow-hidden border-b border-ink-100', animated && 'lg:flex lg:min-h-[calc(100svh-4rem)] lg:items-center lg:pb-16']}
+>
+  <div class="container-x grid w-full gap-12 py-16 md:py-24 lg:grid-cols-[1.55fr_1fr] lg:items-end">
     <div class="max-w-[46ch] lg:max-w-none">
-      <p class="eyebrow">{p.eyebrow}</p>
-      <h1 class="h-display mt-5 text-[clamp(2rem,5.2vw,3.4rem)] font-semibold leading-[1.06] tracking-[-0.02em] text-ink-950" style="text-wrap:balance">
-        {p.h1}
-      </h1>
-      <div class="mt-7 flex max-w-[64ch] flex-col gap-4 text-[1.03rem] leading-relaxed text-ink-600">
+      <p class="eyebrow hero-in" style="--d:0">{p.eyebrow}</p>
+      {animated ? (
+        <h1 class="h-display mt-5 text-[clamp(2.1rem,4.4vw,3.5rem)] font-semibold leading-[1.04] tracking-[-0.03em] text-ink-950">
+          <span class="sr-only">{p.h1}</span>
+          <span aria-hidden="true" class="block">
+            <span class="hero-in block" style="--d:1">{p.h1Lead}</span>
+            <span class="rotator hero-in" style="--d:2" data-rotator>
+              {p.rotating!.map((r, i) => <span class:list={['rotator-item text-gradient', i === 0 && 'is-on']}>{r}</span>)}
+            </span>
+          </span>
+        </h1>
+      ) : (
+        <h1 class="h-display hero-in mt-5 text-[clamp(2rem,5.2vw,3.4rem)] font-semibold leading-[1.06] tracking-[-0.02em] text-ink-950" style="--d:1;text-wrap:balance">
+          {p.h1}
+        </h1>
+      )}
+      <div class="hero-in mt-7 flex max-w-[64ch] flex-col gap-4 text-[1.03rem] leading-relaxed text-ink-600" style="--d:3">
         {p.intro.map(t => <p>{t}</p>)}
       </div>
-      <div class="mt-9 flex flex-wrap items-center gap-3">
+      <div class="hero-in mt-9 flex flex-wrap items-center gap-3" style="--d:4">
         <a href={p.ctaPrimary.href} class="btn btn-primary">{p.ctaPrimary.label}</a>
         {p.ctaSecondary && <a href={p.ctaSecondary.href} class="btn btn-ghost">{p.ctaSecondary.label}</a>}
       </div>
-      {p.stats && (
-        <dl class="mt-10 grid max-w-[42rem] grid-cols-2 gap-x-8 gap-y-5 border-t border-ink-100 pt-6 sm:grid-cols-4">
-          {p.stats.map(s => (
+      {stats.length > 0 && (
+        <dl class="hero-in mt-10 grid max-w-[42rem] grid-cols-2 gap-x-8 gap-y-5 border-t border-ink-100 pt-6 sm:grid-cols-4" style="--d:5">
+          {stats.map(s => (
             <div class="flex flex-col-reverse gap-1">
               <dt class="text-[0.8rem] leading-snug text-ink-600">{s.label}</dt>
-              <dd class="h-display text-[1.7rem] font-semibold tabular-nums text-ink-950">{s.value}</dd>
+              <dd class="h-display text-[1.9rem] font-semibold tabular-nums text-ink-950">
+                {s.to !== null
+                  ? <><span data-ticker data-to={s.to} data-from={s.from}>{s.to}</span>{s.suffix}</>
+                  : s.value}
+              </dd>
             </div>
           ))}
         </dl>
@@ -32,8 +59,8 @@ const { profile: p } = Astro.props;
     </div>
 
     <!-- Bloque-tesis desplazado: rompe la simetría del hero centrado -->
-    <aside class="relative lg:-mb-6">
-      <div class="flex items-start gap-4 rounded-xl rounded-tl-sm border border-ink-100 bg-white/70 p-5 shadow-sm md:p-6">
+    <aside class="hero-in relative lg:-mb-6" style="--d:6">
+      <div class="glass flex items-start gap-4 rounded-2xl rounded-tl-sm p-5 md:p-6">
         <img
           src={site.photo} alt={site.name}
           width="200" height="200" loading="eager" decoding="async" fetchpriority="high"
@@ -46,4 +73,11 @@ const { profile: p } = Astro.props;
       </div>
     </aside>
   </div>
+
+  {animated && (
+    <a href="#showcase" class="scroll-cue hero-in" style="--d:7" aria-label="Bajar al primer capítulo">
+      <span>Desliza · empieza la historia</span>
+      <span class="scroll-cue-line" aria-hidden="true"></span>
+    </a>
+  )}
 </section>

@@ -1,0 +1,42 @@
+---
+import ChapterLabel from '../ChapterLabel.astro';
+import { projects } from '../../data/content';
+// Container Scroll Animation (Aceternity, 21st.dev) portado: la pantalla llega
+// inclinada en 3D, se endereza al fijarse y la web real corre dentro.
+const p = projects[0];
+const host = new URL(p.url).host;
+---
+<section id="showcase" data-chapter="Lo que construyo" data-showcase class="showcase relative">
+  <div class="showcase-pin">
+    <div class="container-x text-center" data-showcase-title>
+      <ChapterLabel title="Lo que construyo" class="justify-center" />
+      <h2 class="h-display mx-auto mt-4 max-w-[20ch] text-[clamp(1.9rem,4.6vw,3.5rem)] font-semibold leading-[1.05] tracking-[-0.025em] text-ink-950" style="text-wrap:balance">
+        No es una maqueta. <span class="text-gradient">Está en producción.</span>
+      </h2>
+      <p class="mx-auto mt-3 max-w-[68ch] text-[0.95rem] leading-relaxed text-ink-600">
+        {p.name}: {p.resumen}
+      </p>
+    </div>
+
+    <div class="showcase-stage container-x">
+      <div class="showcase-card" data-showcase-card>
+        <div class="showcase-bezel">
+          <div class="flex items-center gap-1.5 px-3 pb-2.5 pt-1" aria-hidden="true">
+            <span class="h-2.5 w-2.5 rounded-full bg-[#ff5f57]"></span>
+            <span class="h-2.5 w-2.5 rounded-full bg-[#febc2e]"></span>
+            <span class="h-2.5 w-2.5 rounded-full bg-[#28c840]"></span>
+            <span class="mx-auto rounded-md bg-white/10 px-10 py-0.5 font-mono text-[0.7rem] text-white/70">{host}</span>
+          </div>
+          <a href={p.url} rel="noopener" class="showcase-screen" aria-label={`Abrir ${p.name} (${host})`}>
+            <img
+              src="/img/portfolio/logistikos-showcase.webp"
+              alt={`Página de inicio completa de ${p.name}`}
+              width="1200" height="5000" loading="lazy" decoding="async"
+              data-showcase-screen
+            />
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
