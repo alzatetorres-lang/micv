@@ -4,18 +4,20 @@ export const site = {
   role: 'Analista programador y docente técnico acreditado',
   location: 'Cuenca, España',
   url: 'https://natanaelalzatetorres.com',
+  // Solo correo y formulario: el teléfono no se publica en ninguna página ni PDF.
   email: 'alzatetorres@icloud.com',
-  phone: '+34 651 377 113',
-  phoneHref: '+34651377113',
-  whatsapp: 'https://wa.me/34651377113',
   // NC-05: un único handle, el mismo que en CV, LinkedIn e InfoJobs.
   linkedin: 'https://www.linkedin.com/in/natanaelalzatetorres',
   linkedinHandle: 'in/natanaelalzatetorres',
   photo: '/photo.jpg',
   ogImage: '/og.jpg',
-  // NC-03: endpoint real. Sustituir por la access key de Web3Forms.
+  // NC-03: endpoint real. La access key de Web3Forms es pública por diseño
+  // (viaja en el HTML); la variable de entorno permite rotarla sin tocar código.
   formEndpoint: 'https://api.web3forms.com/submit',
-  formKey: import.meta.env.PUBLIC_WEB3FORMS_KEY ?? '',
+  // Datos LSSI art. 10. Vacíos = la línea no se muestra. Rellenar antes de facturar desde la web.
+  nif: '',
+  domicilio: '',
+  formKey: import.meta.env.PUBLIC_WEB3FORMS_KEY || 'ea55e5d5-a299-4e21-8654-68d70d9b082e',
 } as const;
 
 /** NC-04: cada ruta tiene su PDF en public/cv/. Generados con cv-ecosystem. */
@@ -34,7 +36,7 @@ export const facts = {
   horasImpartidas: 250,
   horasCalidad: 425,
   anosDesde: 2017,
-  webssEnProduccion: 4,
+  proyectosPublicados: 6,
   notaSSCE: '8,2',
 } as const;
 
@@ -46,12 +48,24 @@ export const trust = [
   { label: 'AESA',      title: 'Piloto oficial de drones' },
 ] as const;
 
+/** Cabecera: primero el trabajo, después los perfiles. */
 export const nav = [
+  { href: '/casos',             label: 'Proyectos' },
+  { href: '/#capacidades',      label: 'Capacidades' },
+  { href: '/docencia',          label: 'Docencia IT' },
+  { href: '/tecnico',           label: 'Formación y LMS' },
+  { href: '/calidad',           label: 'Calidad' },
+  { href: '/automatizacion-ia', label: 'Automatización IA' },
+] as const;
+
+/** Menú móvil y pie: todas las páginas indexables. */
+export const navAll = [
   { href: '/',                  label: 'Inicio' },
+  { href: '/casos',             label: 'Proyectos' },
+  { href: '/#capacidades',      label: 'Capacidades' },
   { href: '/docencia',          label: 'Docencia IT' },
   { href: '/tecnico',           label: 'Formación y LMS' },
   { href: '/calidad',           label: 'Calidad' },
   { href: '/administracion',    label: 'Administración' },
   { href: '/automatizacion-ia', label: 'Automatización IA' },
-  { href: '/casos',             label: 'Casos' },
 ] as const;

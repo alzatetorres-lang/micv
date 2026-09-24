@@ -13,12 +13,12 @@ import { site } from '../data/site';
   <h2>Responsable del tratamiento</h2>
   <ul>
     <li><strong>Responsable:</strong> {site.name}</li>
-    <li><strong>NIF:</strong> __nif__</li>
+    {site.nif && <li><strong>NIF:</strong> {site.nif}</li>}
     <li><strong>Contacto:</strong> <a href={`mailto:${site.email}`}>{site.email}</a></li>
   </ul>
 
   <h2>Qué datos se recogen</h2>
-  <p>Solo los que introduces en el formulario de contacto: <strong>nombre, correo electrónico, teléfono (opcional), tipo de necesidad y el mensaje</strong> que escribas. No se recogen categorías especiales de datos, y te pido que no incluyas información sensible en el mensaje.</p>
+  <p>Solo los que introduces en el formulario de contacto: <strong>nombre, correo electrónico, empresa o centro (opcional), tipo de necesidad y el mensaje</strong> que escribas. No se recogen categorías especiales de datos, y te pido que no incluyas información sensible en el mensaje.</p>
 
   <h2>Para qué se usan</h2>
   <ul>

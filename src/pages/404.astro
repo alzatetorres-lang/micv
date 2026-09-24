@@ -3,7 +3,7 @@ import Base from '../layouts/Base.astro';
 import { site } from '../data/site';
 ---
 <Base title={`Página no encontrada · ${site.name}`} description="La página que buscas no existe. Vuelve al inicio o escríbeme directamente.">
-  <main class="min-h-[80vh] grid place-items-center bg-grain">
+  <section class="min-h-[80vh] grid place-items-center">
     <div class="container-x text-center max-w-2xl">
       <p class="eyebrow">Error 404</p>
       <h1 class="h-display mt-4 text-5xl md:text-6xl text-ink-950">
@@ -11,12 +11,13 @@ import { site } from '../data/site';
       </h1>
       <p class="mt-5 text-ink-600 text-lg leading-relaxed">
         Puede que el enlace esté desactualizado o que hayas llegado desde una URL antigua.
-        Vuelve al inicio o escríbeme si buscabas información concreta sobre mi perfil docente.
+        Vuelve al inicio, revisa los proyectos o escríbeme si buscabas algo concreto.
       </p>
       <div class="mt-8 flex flex-wrap gap-3 justify-center">
         <a href="/" class="btn btn-primary">Volver al inicio</a>
-        <a href={`mailto:${site.email}`} class="btn btn-ghost">Escribirme directamente</a>
+        <a href="/casos" class="btn btn-ghost">Ver proyectos</a>
+        <a href={`mailto:${site.email}`} class="btn btn-ghost">Escribirme</a>
       </div>
     </div>
-  </main>
+  </section>
 </Base>

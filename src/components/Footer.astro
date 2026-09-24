@@ -1,5 +1,7 @@
 ---
-import { site, nav } from '../data/site';
+import { site, navAll } from '../data/site';
+interface Props { contactHref?: string }
+const { contactHref = '/#contacto' } = Astro.props;
 const year = new Date().getFullYear();
 ---
 <footer class="mt-24 border-t border-ink-100 bg-white/60">
@@ -7,18 +9,18 @@ const year = new Date().getFullYear();
     <div class="max-w-sm">
       <p class="h-display text-lg font-semibold text-ink-950">{site.name}</p>
       <p class="mt-2 text-[0.92rem] leading-relaxed text-ink-600">
-        Analista programador y docente técnico acreditado. Cuenca y remoto.
+        Analista programador y docente técnico acreditado. Webs en producción, formación y calidad. Cuenca y remoto.
       </p>
       <div class="mt-4 flex flex-wrap gap-2">
-        <a href={`mailto:${site.email}`} class="btn btn-ghost text-[0.82rem]">Escríbeme</a>
-        <a href={site.whatsapp} class="btn btn-whatsapp text-[0.82rem]" rel="noopener">WhatsApp</a>
+        <a href={contactHref} class="btn btn-primary text-[0.82rem]">Escríbeme</a>
+        <a href="/casos" class="btn btn-ghost text-[0.82rem]">Ver proyectos</a>
       </div>
     </div>
 
     <nav aria-label="Secciones">
-      <p class="eyebrow">Perfiles</p>
+      <p class="eyebrow">Páginas</p>
       <ul class="mt-3 flex flex-col gap-1.5">
-        {nav.map(n => (
+        {navAll.map(n => (
           <li><a href={n.href} class="text-[0.9rem] text-ink-600 transition-colors hover:text-brand-700">{n.label}</a></li>
         ))}
       </ul>
@@ -28,7 +30,7 @@ const year = new Date().getFullYear();
       <p class="eyebrow">Contacto y legal</p>
       <ul class="mt-3 flex flex-col gap-1.5 text-[0.9rem] text-ink-600">
         <li><a href={`mailto:${site.email}`} class="transition-colors hover:text-brand-700">{site.email}</a></li>
-        <li><a href={`tel:${site.phoneHref}`} class="transition-colors hover:text-brand-700">{site.phone}</a></li>
+        <li><a href={contactHref} class="transition-colors hover:text-brand-700">Formulario de contacto</a></li>
         <li><a href={site.linkedin} rel="noopener me" class="transition-colors hover:text-brand-700">{site.linkedinHandle}</a></li>
         <li class="pt-2"><a href="/aviso-legal" class="transition-colors hover:text-brand-700">Aviso legal</a></li>
         <li><a href="/privacidad" class="transition-colors hover:text-brand-700">Política de privacidad</a></li>

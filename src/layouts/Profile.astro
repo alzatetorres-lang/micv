@@ -6,6 +6,7 @@ import Extras from '../components/sections/Extras.astro';
 import Process from '../components/sections/Process.astro';
 import Timeline from '../components/sections/Timeline.astro';
 import Portfolio from '../components/sections/Portfolio.astro';
+import Capabilities from '../components/sections/Capabilities.astro';
 import About from '../components/sections/About.astro';
 import Faq from '../components/sections/Faq.astro';
 import Contact from '../components/sections/Contact.astro';
@@ -14,14 +15,18 @@ import type { Profile } from '../data/content';
 
 interface Props { profile: Profile }
 const { profile: p } = Astro.props;
+const detailed = p.slug === 'casos';
 ---
-<Base title={p.title} description={p.description} personSchema={p.slug === 'home'}>
+<Base title={p.title} description={p.description} personSchema={p.slug === 'home'} hasContact>
   <Hero profile={p} />
   <CrossLinks links={p.crossLinks} />
+  {p.portfolioFirst && p.showPortfolio && <Portfolio detailed={detailed} />}
+  {p.portfolioFirst && p.showCapabilities && <Capabilities />}
   <Services items={p.services} note={p.servicesNote} />
   {p.extras && <Extras heading={p.extras.heading} items={p.extras.items} />}
   {p.process && <Process steps={p.process} />}
-  {p.showPortfolio && <Portfolio detailed={p.slug === 'casos'} />}
+  {!p.portfolioFirst && p.showPortfolio && <Portfolio detailed={detailed} />}
+  {!p.portfolioFirst && p.showCapabilities && <Capabilities />}
   {p.showTimeline && <Timeline />}
   {p.showAbout && <About />}
   {p.faq && <Faq items={p.faq} />}
