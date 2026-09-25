@@ -1,0 +1,24 @@
+---
+import ChapterLabel from '../ChapterLabel.astro';
+// Text Reveal (Magic UI, 21st.dev) portado: el texto se ilumina palabra a
+// palabra mientras la sección está fijada. *palabra* marca un acento de color.
+interface Props { text: string }
+const { text } = Astro.props;
+const words = text.split(/\s+/).map(w => {
+  const accent = /^\*.+\*[.,:;]?$/.test(w);
+  return { w: w.replace(/\*/g, ''), accent };
+});
+---
+<section id="enfoque" data-chapter="Cómo trabajo" data-manifesto class="manifesto relative">
+  <div class="manifesto-pin container-x">
+    <div class="w-full max-w-5xl">
+      <ChapterLabel title="Cómo trabajo" />
+      <p class="manifesto-text h-display mt-6">
+        {words.map(({ w, accent }) => (
+          <span data-word class:list={['manifesto-word', accent && 'text-gradient']}>{w} </span>
+        ))}
+      </p>
+      <span class="manifesto-bar" aria-hidden="true"><span data-manifesto-bar></span></span>
+    </div>
+  </div>
+</section>

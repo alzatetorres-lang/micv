@@ -137,11 +137,16 @@ const webpage = {
     </main>
     <Footer contactHref={contactHref} />
     <ScrollFX />
+    <!-- Raíl de capítulos: lo construye story.ts a partir de [data-chapter] -->
+    <nav class="story-rail" aria-label="Capítulos de la página" data-rail hidden></nav>
     <script>
+      import 'lenis/dist/lenis.css';
       import { initReveal } from '../scripts/reveal';
       import { initScrollFX } from '../scripts/scrollfx';
+      import { initStory } from '../scripts/story';
       initReveal();
       initScrollFX();
+      initStory();
       document.body.classList.add('has-loaded');
     </script>
   </body>

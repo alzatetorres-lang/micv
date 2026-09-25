@@ -7,6 +7,9 @@ import Process from '../components/sections/Process.astro';
 import Timeline from '../components/sections/Timeline.astro';
 import Portfolio from '../components/sections/Portfolio.astro';
 import Capabilities from '../components/sections/Capabilities.astro';
+import Showcase from '../components/sections/Showcase.astro';
+import Manifesto from '../components/sections/Manifesto.astro';
+import Marquee from '../components/sections/Marquee.astro';
 import About from '../components/sections/About.astro';
 import Faq from '../components/sections/Faq.astro';
 import Contact from '../components/sections/Contact.astro';
@@ -16,19 +19,26 @@ import type { Profile } from '../data/content';
 interface Props { profile: Profile }
 const { profile: p } = Astro.props;
 const detailed = p.slug === 'casos';
+// La portada se cuenta como historia: producto real, enfoque, proyectos,
+// herramientas, capacidades, servicios, trayectoria, persona y contacto.
+const story = Boolean(p.portfolioFirst);
 ---
 <Base title={p.title} description={p.description} personSchema={p.slug === 'home'} hasContact>
   <Hero profile={p} />
-  <CrossLinks links={p.crossLinks} />
-  {p.portfolioFirst && p.showPortfolio && <Portfolio detailed={detailed} />}
-  {p.portfolioFirst && p.showCapabilities && <Capabilities />}
+  {!story && <CrossLinks links={p.crossLinks} />}
+  {story && <Showcase />}
+  {story && p.manifesto && <Manifesto text={p.manifesto} />}
+  {story && p.showPortfolio && <Portfolio detailed={detailed} />}
+  {story && <Marquee />}
+  {story && p.showCapabilities && <Capabilities />}
   <Services items={p.services} note={p.servicesNote} />
   {p.extras && <Extras heading={p.extras.heading} items={p.extras.items} />}
   {p.process && <Process steps={p.process} />}
-  {!p.portfolioFirst && p.showPortfolio && <Portfolio detailed={detailed} />}
-  {!p.portfolioFirst && p.showCapabilities && <Capabilities />}
+  {!story && p.showPortfolio && <Portfolio detailed={detailed} />}
+  {!story && p.showCapabilities && <Capabilities />}
   {p.showTimeline && <Timeline />}
   {p.showAbout && <About />}
   {p.faq && <Faq items={p.faq} />}
+  {story && <CrossLinks links={p.crossLinks} />}
   <Contact />
 </Base>

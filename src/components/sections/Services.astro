@@ -1,17 +1,19 @@
 ---
 import type { Service } from '../../data/content';
+import ChapterLabel from '../ChapterLabel.astro';
 interface Props { heading?: string; items: Service[]; note?: string; id?: string }
 const { heading = 'Cómo puedo ayudarte', items, note, id = 'servicios' } = Astro.props;
 ---
 {items.length > 0 && (
-<section id={id} class="container-x pt-16 pb-20 md:pt-20 md:pb-24">
-  <h2 class="h-section max-w-[24ch] text-ink-950">{heading}</h2>
+<section id={id} data-chapter="Servicios" class="container-x pt-20 pb-20 md:pt-28 md:pb-24">
+  <ChapterLabel title="Servicios" />
+  <h2 class="h-section mt-3 max-w-[24ch] text-ink-950">{heading}</h2>
 
-  <!-- Lista numerada asimétrica en vez de tres tarjetas iguales -->
-  <ol class="mt-12 flex flex-col gap-px overflow-hidden rounded-lg border border-ink-100 bg-ink-100">
+  <!-- Lista numerada asimétrica; el borde se ilumina bajo el cursor (Card Spotlight) -->
+  <ol class="mt-12 flex flex-col gap-3">
     {items.map((s, i) => (
-      <li class="reveal grid gap-4 bg-ink-50 p-7 md:grid-cols-[3.5rem_1fr_1.15fr] md:items-start md:gap-8 md:p-9">
-        <span class="font-mono text-[0.8rem] tabular-nums text-brand-600">{String(i + 1).padStart(2, '0')}</span>
+      <li data-spotlight class:list={['spot reveal grid gap-4 rounded-2xl p-7 md:grid-cols-[4.5rem_1fr_1.15fr] md:items-start md:gap-8 md:p-9', `reveal-delay-${Math.min(i + 1, 4)}`]}>
+        <span class="h-display text-[2rem] font-semibold leading-none tabular-nums text-brand-500/70">{String(i + 1).padStart(2, '0')}</span>
         <h3 class="h-display text-[1.12rem] font-semibold leading-snug text-ink-950" style="text-wrap:balance">{s.title}</h3>
         <p class="max-w-[62ch] text-[0.96rem] leading-relaxed text-ink-600">{s.body}</p>
       </li>
